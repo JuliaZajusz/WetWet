@@ -1,0 +1,2 @@
+rootProject.name = 'WetWetw'
+include 'reservationservice-app'
