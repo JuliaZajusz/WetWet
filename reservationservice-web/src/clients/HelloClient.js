@@ -1,8 +1,4 @@
-import axios from 'axios'
-
-export const client = axios.create({
-  // responseType: 'json'
-})
+import { client } from './RestClient'
 
 export const getHello = async () => {
   const response = await client.get(`/api`);
