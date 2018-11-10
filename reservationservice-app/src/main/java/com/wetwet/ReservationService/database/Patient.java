@@ -1,13 +1,19 @@
 package com.wetwet.ReservationService.database;
 
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+
 public class Patient {
 
   
     /**
      * null
      */
-  private long id;
+  private @Id @GeneratedValue long id;
   
     /**
      * null
@@ -39,6 +45,18 @@ public class Patient {
      */
   private long breedId;
 
+  public Patient(){
+
+  }
+
+  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, long breedId) {
+    this.name = name;
+    this.sex = sex;
+    this.birthdate = birthdate;
+    this.coat = coat;
+    this.specialCharacters = specialCharacters;
+    this.breedId = breedId;
+  }
 
   public long getId() {
     return id;
