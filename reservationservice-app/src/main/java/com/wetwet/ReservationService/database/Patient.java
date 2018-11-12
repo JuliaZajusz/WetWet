@@ -1,13 +1,14 @@
 package com.wetwet.ReservationService.database;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+
 
 @Entity
 
-public class Patient {
+public class Patient implements Serializable{
 
   
     /**
@@ -43,19 +44,23 @@ public class Patient {
     /**
      * null
      */
-  private long breedId;
+
+  @OneToOne
+  @JoinColumn(name = "Breed_ID")
+  @JsonManagedReference
+  private Breed breed;
 
   public Patient(){
 
   }
 
-  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, long breedId) {
+
+  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters) {
     this.name = name;
     this.sex = sex;
     this.birthdate = birthdate;
     this.coat = coat;
     this.specialCharacters = specialCharacters;
-    this.breedId = breedId;
   }
 
   public long getId() {
@@ -111,13 +116,12 @@ public class Patient {
     this.specialCharacters = specialCharacters;
   }
 
-
-  public long getBreedId() {
-    return breedId;
+  public Breed getBreed() {
+    return breed;
   }
 
-  public void setBreedId(long breedId) {
-    this.breedId = breedId;
+  public void setBreed(Breed breed) {
+    this.breed = breed;
   }
 
 }

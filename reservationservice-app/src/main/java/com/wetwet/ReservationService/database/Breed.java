@@ -1,13 +1,20 @@
 package com.wetwet.ReservationService.database;
 
 
-public class Breed {
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+public class Breed implements Serializable{
 
   
     /**
      * null
      */
-  private long id;
+  private @Id @GeneratedValue long id;
   
     /**
      * null
@@ -17,8 +24,21 @@ public class Breed {
     /**
      * null
      */
-  private long speciesId;
+  @OneToOne
+  @JoinColumn(name = "Species_ID")
+  @JsonManagedReference
+  private Species species;
 
+  @OneToOne(mappedBy = "breed")
+  @JsonBackReference
+  private Patient patient;
+
+  public Breed() {
+  }
+
+  public Breed(String name) {
+    this.name = name;
+  }
 
   public long getId() {
     return id;
@@ -38,12 +58,19 @@ public class Breed {
   }
 
 
-  public long getSpeciesId() {
-    return speciesId;
+  public Patient getPatient() {
+    return patient;
   }
 
-  public void setSpeciesId(long speciesId) {
-    this.speciesId = speciesId;
+  public void setPatient(Patient patient) {
+    this.patient = patient;
   }
 
+  public Species getSpecies() {
+    return species;
+  }
+
+  public void setSpecies(Species species) {
+    this.species = species;
+  }
 }

@@ -11,3 +11,4 @@ spring:
     username: springuser
     password: qwerty123
 spring.datasource.url: jdbc:mysql://localhost:3306/wetwet
+cors.urls: http://localhost:3000

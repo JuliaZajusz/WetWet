@@ -1,55 +1,54 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import axios from 'axios'
 
 
 class PatientsList extends Component {
 
     constructor() {
-        super()
+        super();
         this.state = {
             'data' : []
         }
     }
-
     componentDidMount() {
-        fetch('http://localhost:8080/patients/all')
-            .then(res => res.json())
-            .then(res => this.setState({'data': res}));
-        console.log('hello kitty');
+        axios.get('http://localhost:8080/api/patients/all')
+            .then(res => this.setState({'data': res.data}))
 
     }
     columns = [{
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <a href="http://google.com">{text}</a>
+        title: 'No.',
+        dataIndex: 'id',
+        key: 'id'
     },{
-        title: 'Birthdate',
-        dataIndex: 'birthdate',
-        key: 'birthdate',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            render: text => <a href="http://google.com">{text}</a>
+    },{
+        title: 'Species',
+        dataIndex: 'breed.species.name',
+        key: 'species',
     },{
         title: 'Breed',
-        dataIndex: 'breedId',
+        dataIndex: 'breed.name',
         key: 'breed',
     }];
 
 
     render() {
         const data = this.state.data;
-        console.log(data);
         return (
             <div className={'margin-md'}>
                 <h3>Lista pacjentów</h3>
-
                 <Table dataSource={data}
                        columns={this.columns}
-                       size="middle"
+                       rowKey='id'
+                       size="small"
                 />
-
             </div>
         )
     }
-
 }
 
 export default PatientsList
