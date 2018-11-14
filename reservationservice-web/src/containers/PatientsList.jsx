@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import axios from 'axios'
+import { getPatients } from "../clients/PatientClient";
 
 
 class PatientsList extends Component {
@@ -8,29 +8,23 @@ class PatientsList extends Component {
     constructor() {
         super();
         this.state = {
-            'data' : []
+            data : []
         }
     }
-    componentDidMount() {
-        axios.get('http://localhost:8080/api/patients/all')
-            .then(res => this.setState({'data': res.data}))
-
+    componentWillMount(){
+        getPatients().then(res => this.setState({data: res}))
     }
     columns = [{
-        title: 'No.',
-        dataIndex: 'id',
-        key: 'id'
-    },{
-            title: 'Name',
+            title: 'Imię',
             dataIndex: 'name',
             key: 'name',
-            render: text => <a href="http://google.com">{text}</a>
+            render: text => <a href="">{text}</a>
     },{
-        title: 'Species',
+        title: 'Gatunek',
         dataIndex: 'breed.species.name',
         key: 'species',
     },{
-        title: 'Breed',
+        title: 'Rasa',
         dataIndex: 'breed.name',
         key: 'breed',
     }];
@@ -44,7 +38,7 @@ class PatientsList extends Component {
                 <Table dataSource={data}
                        columns={this.columns}
                        rowKey='id'
-                       size="small"
+                       size="medium"
                 />
             </div>
         )

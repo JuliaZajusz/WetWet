@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Entity
 public class Species implements Serializable{
 
-  
     /**
      * null
      */
@@ -23,10 +22,6 @@ public class Species implements Serializable{
      * null
      */
   private String name;
-
-  @OneToOne(mappedBy = "species")
-  @JsonBackReference
-  private Breed breed;
 
   public Species() {
   }
@@ -52,11 +47,5 @@ public class Species implements Serializable{
     this.name = name;
   }
 
-  public Breed getBreed() {
-    return breed;
-  }
 
-  public void setBreed(Breed breed) {
-    this.breed = breed;
-  }
 }

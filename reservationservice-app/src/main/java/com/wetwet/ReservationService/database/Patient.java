@@ -10,57 +10,32 @@ import java.io.Serializable;
 
 public class Patient implements Serializable{
 
-  
-    /**
-     * null
-     */
-  private @Id @GeneratedValue long id;
-  
-    /**
-     * null
-     */
-  private String name;
-  
-    /**
-     * null
-     */
-  private String sex;
-  
-    /**
-     * null
-     */
-  private String birthdate;
-  
-    /**
-     * null
-     */
-  private String coat;
-  
-    /**
-     * null
-     */
-  private String specialCharacters;
-  
-    /**
-     * null
-     */
 
-  @OneToOne
-  @JoinColumn(name = "Breed_ID")
-  @JsonManagedReference
-  private Breed breed;
+  private @Id @GeneratedValue long id;
+
+  private String name;
+
+  private String sex;
+
+  private String birthdate;
+
+  private String coat;
+
+  private String specialCharacters;
+
+  private long breedId;
 
   public Patient(){
 
   }
 
-
-  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters) {
+  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, long breedId) {
     this.name = name;
     this.sex = sex;
     this.birthdate = birthdate;
     this.coat = coat;
     this.specialCharacters = specialCharacters;
+    this.breedId = breedId;
   }
 
   public long getId() {
@@ -116,12 +91,11 @@ public class Patient implements Serializable{
     this.specialCharacters = specialCharacters;
   }
 
-  public Breed getBreed() {
-    return breed;
+  public long getBreedId() {
+    return breedId;
   }
 
-  public void setBreed(Breed breed) {
-    this.breed = breed;
+  public void setBreedId(long breedId) {
+    this.breedId = breedId;
   }
-
 }
