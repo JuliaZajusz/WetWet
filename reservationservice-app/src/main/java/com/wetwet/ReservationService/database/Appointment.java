@@ -1,133 +1,147 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
 
+@Entity
+@Table(name = "appointment")
 public class Appointment {
 
-  
+
     /**
      * null
      */
-  private long id;
-  
+    @Id
+    @GeneratedValue
+    @Column(name = "ID")
+    private Long id;
+
     /**
      * null
      */
-  private String title;
-  
+    private String title;
+
     /**
      * null
      */
-  private String description;
-  
+    private String description;
+
     /**
      * null
      */
-  private long cost;
-  
+    private Long cost;
+
     /**
      * null
      */
-  private java.sql.Date date;
-  
+    private java.sql.Date date;
+
     /**
      * null
      */
-  private java.sql.Time startTime;
-  
+    private java.sql.Time startTime;
+
     /**
      * null
      */
-  private java.sql.Time endTime;
-  
+
+    private java.sql.Time endTime;
+
     /**
      * null
      */
-  private long addressPointId;
-  
+    private Long addressPointId;
+
     /**
      * null
-     */
-  private long consultingRoomId;
+     //     */
+    private Long consultingRoomId;
 
+    public Appointment(String title, String description, long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {
+        this.title = title;
+        this.description = description;
+        this.cost = cost;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.addressPointId = addressPointId;
+        this.consultingRoomId = consultingRoomId;
+    }
 
-  public long getId() {
-    return id;
-  }
+    public Appointment() {
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public long getId() {
+        return id;
+    }
 
+    public String getTitle() {
+        return title;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public long getCost() {
+        return cost;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public java.sql.Date getDate() {
+        return date;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public java.sql.Time getStartTime() {
+        return startTime;
+    }
 
+    public java.sql.Time getEndTime() {
+        return endTime;
+    }
 
-  public long getCost() {
-    return cost;
-  }
+    public Long getAddressPointId() {
+        return addressPointId;
+    }
 
-  public void setCost(long cost) {
-    this.cost = cost;
-  }
+    public Long getConsultingRoomId() {
+        return consultingRoomId;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public java.sql.Date getDate() {
-    return date;
-  }
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
 
-  public void setDate(java.sql.Date date) {
-    this.date = date;
-  }
+    public void setDate(java.sql.Date date) {
+        this.date = date;
+    }
 
+    public void setStartTime(java.sql.Time startTime) {
+        this.startTime = startTime;
+    }
 
-  public java.sql.Time getStartTime() {
-    return startTime;
-  }
+    public void setEndTime(java.sql.Time endTime) {
+        this.endTime = endTime;
+    }
 
-  public void setStartTime(java.sql.Time startTime) {
-    this.startTime = startTime;
-  }
+    public void setAddressPointId(Long addressPointId) {
+        this.addressPointId = addressPointId;
+    }
 
+    public void setConsultingRoomId(Long consultingRoomId) {
+        this.consultingRoomId = consultingRoomId;
+    }
 
-  public java.sql.Time getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(java.sql.Time endTime) {
-    this.endTime = endTime;
-  }
-
-
-  public long getAddressPointId() {
-    return addressPointId;
-  }
-
-  public void setAddressPointId(long addressPointId) {
-    this.addressPointId = addressPointId;
-  }
-
-
-  public long getConsultingRoomId() {
-    return consultingRoomId;
-  }
-
-  public void setConsultingRoomId(long consultingRoomId) {
-    this.consultingRoomId = consultingRoomId;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
 }

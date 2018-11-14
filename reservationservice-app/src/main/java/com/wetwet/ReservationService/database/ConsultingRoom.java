@@ -3,17 +3,17 @@ package com.wetwet.ReservationService.database;
 
 public class ConsultingRoom {
 
-  
+
     /**
      * null
      */
-  private long id;
-  
+    private Long id;
+
     /**
      * null
      */
   private String roomNumber;
-  
+
     /**
      * null
      */
