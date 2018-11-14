@@ -21,7 +21,7 @@ class PatientsList extends Component {
             render: text => <a href="">{text}</a>
     },{
         title: 'Gatunek',
-        dataIndex: 'breed.species.name',
+        dataIndex: 'breed.species',
         key: 'species',
     },{
         title: 'Rasa',

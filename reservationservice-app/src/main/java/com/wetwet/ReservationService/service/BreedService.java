@@ -30,7 +30,7 @@ public class BreedService {
         BreedDTO breedDTO = new BreedDTO();
         Breed breed = repository.findById(id).get();
         BeanUtils.copyProperties(breed, breedDTO);
-        breedDTO.setSpecies(speciesService.getSpeciesDTOById(breed.getSpeciesId()));
+        breedDTO.setSpecies(speciesService.getSpeciesById(breed.getSpeciesId()).getName());
         return breedDTO;
     }
 }

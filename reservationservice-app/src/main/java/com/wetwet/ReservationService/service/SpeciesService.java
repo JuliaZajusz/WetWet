@@ -2,9 +2,7 @@ package com.wetwet.ReservationService.service;
 
 import com.wetwet.ReservationService.database.Species;
 
-import com.wetwet.ReservationService.dto.SpeciesDTO;
 import com.wetwet.ReservationService.repository.SpeciesRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +21,5 @@ public class SpeciesService {
 
     public Species getSpeciesById(long id){
         return repository.findById(id).isPresent() ? repository.findById(id).get() : null;
-    }
-
-    public SpeciesDTO getSpeciesDTOById(long id){
-        SpeciesDTO speciesDTO = new SpeciesDTO();
-        Species species = repository.findById(id).get();
-        BeanUtils.copyProperties(species, speciesDTO);
-        return speciesDTO;
     }
 }

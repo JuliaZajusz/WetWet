@@ -4,7 +4,7 @@ public class BreedDTO {
 
     private String name;
 
-    private SpeciesDTO species;
+    private String species;
 
     public BreedDTO() {
     }
@@ -17,11 +17,11 @@ public class BreedDTO {
         this.name = name;
     }
 
-    public SpeciesDTO getSpecies() {
+    public String getSpecies() {
         return species;
     }
 
-    public void setSpecies(SpeciesDTO species) {
+    public void setSpecies(String species) {
         this.species = species;
     }
 }
