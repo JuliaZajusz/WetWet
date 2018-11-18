@@ -1,44 +1,42 @@
 package com.wetwet.ReservationService.database;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-public class Patient {
+import javax.persistence.*;
+import java.io.Serializable;
 
-  
-    /**
-     * null
-     */
-  private long id;
-  
-    /**
-     * null
-     */
+
+@Entity
+
+public class Patient implements Serializable{
+
+
+  private @Id @GeneratedValue long id;
+
   private String name;
-  
-    /**
-     * null
-     */
+
   private String sex;
-  
-    /**
-     * null
-     */
+
   private String birthdate;
-  
-    /**
-     * null
-     */
+
   private String coat;
-  
-    /**
-     * null
-     */
+
   private String specialCharacters;
-  
-    /**
-     * null
-     */
+
   private long breedId;
 
+  public Patient(){
+
+  }
+
+  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, long breedId) {
+    this.name = name;
+    this.sex = sex;
+    this.birthdate = birthdate;
+    this.coat = coat;
+    this.specialCharacters = specialCharacters;
+    this.breedId = breedId;
+  }
 
   public long getId() {
     return id;
@@ -93,7 +91,6 @@ public class Patient {
     this.specialCharacters = specialCharacters;
   }
 
-
   public long getBreedId() {
     return breedId;
   }
@@ -101,5 +98,4 @@ public class Patient {
   public void setBreedId(long breedId) {
     this.breedId = breedId;
   }
-
 }

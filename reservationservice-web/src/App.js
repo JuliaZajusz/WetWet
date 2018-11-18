@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { getHello } from './clients/HelloClient'
 import EmployeesList from './containers/EmloyeesList'
+import PatientsList from './containers/PatientsList'
 import { Route, Router, Switch } from 'react-router';
 import { Icon, Layout, Menu } from 'antd';
 import history from './history';
@@ -64,14 +65,8 @@ class App extends Component {
 
               <Switch>
                 <Route exact path='/users' component={EmployeesList}/>
+                <Route exact path='/patients' component={PatientsList}/>
                 <Route exact path='/timetable' component={Timetable}/>
-                <Route exact path='/patients' component={() =>
-                  <Content style={{ margin: '0 16px' }}>
-                    <h3 style={{ margin: '16px 0' }}>Mruczek - kot - kot perski</h3>
-                    <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                      Mruczek is a cat.
-                    </div>
-                  </Content>}/>
                 <Route component={() => <div>
                   <button onClick={() => this.getText()}>get text</button>
                   <div>{this.state.text}</div>

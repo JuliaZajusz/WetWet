@@ -1,24 +1,34 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.*;
+import java.io.Serializable;
 
-public class Breed {
+@Entity
+public class Breed implements Serializable{
 
   
     /**
      * null
      */
-  private long id;
+  private @Id @GeneratedValue long id;
   
     /**
      * null
      */
   private String name;
-  
-    /**
-     * null
-     */
+
+  /**
+   * null
+   */
   private long speciesId;
 
+    public Breed() {
+    }
+
+    public Breed(String name, long speciesId) {
+        this.name = name;
+        this.speciesId = speciesId;
+    }
 
   public long getId() {
     return id;
