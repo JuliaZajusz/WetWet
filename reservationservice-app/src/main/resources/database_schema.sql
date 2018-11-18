@@ -20,7 +20,7 @@ CREATE TABLE Appointment (
   ID                    int(10) NOT NULL AUTO_INCREMENT,
   Title                 varchar(255) NOT NULL,
   Description           varchar(255),
-  Cost                  int(10) NOT NULL,
+  Cost                  int(10),
   Date                  date NOT NULL,
   Start_Time             time(6) NOT NULL,
   End_Time               time(6) NOT NULL,

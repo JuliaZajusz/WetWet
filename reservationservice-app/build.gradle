@@ -43,7 +43,3 @@ bootJar {
 }
 
 
-//task run(type: JavaExec, dependsOn: classes) {
-//	main = 'com.wetwet.ReservationService.ReservationServiceApplication'
-//	classpath = sourceSets.main.runtimeClasspath
-//}

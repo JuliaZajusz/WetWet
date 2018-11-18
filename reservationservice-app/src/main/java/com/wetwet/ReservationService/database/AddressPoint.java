@@ -3,22 +3,22 @@ package com.wetwet.ReservationService.database;
 
 public class AddressPoint {
 
-  
+
     /**
      * null
      */
-  private long id;
-  
+    private Long id;
+
     /**
      * null
      */
   private String houseAppartmentNumber;
-  
+
     /**
      * null
      */
   private long streetId;
-  
+
     /**
      * null
      */

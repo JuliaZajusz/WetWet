@@ -6,6 +6,7 @@ import PatientsList from './containers/PatientsList'
 import { Route, Router, Switch } from 'react-router';
 import { Icon, Layout, Menu } from 'antd';
 import history from './history';
+import Timetable from './containers/Timetable'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -50,14 +51,10 @@ class App extends Component {
                   <Icon type="user"/>
                   <span>Opiekuni</span>
                 </Menu.Item>
-                <SubMenu
-                  key="/calendar"
-                  title={<span><Icon type="calendar"/><span>Terminarz</span></span>}
-                >
-                  <Menu.Item key="/employee/1">Jan Kowalski</Menu.Item>
-                  <Menu.Item key="/employee/2">Andrzej Wolej</Menu.Item>
-                  <Menu.Item key="/employee/3">Anna Wannicka</Menu.Item>
-                </SubMenu>
+                <Menu.Item key="/timetable">
+                  <Icon type="calendar"/>
+                  <span>Terminarz</span>
+                </Menu.Item>
                 <Menu.Item key="/users">
                   <Icon type="team"/>
                   <span>Użytkownicy</span>
@@ -69,6 +66,7 @@ class App extends Component {
               <Switch>
                 <Route exact path='/users' component={EmployeesList}/>
                 <Route exact path='/patients' component={PatientsList}/>
+                <Route exact path='/timetable' component={Timetable}/>
                 <Route component={() => <div>
                   <button onClick={() => this.getText()}>get text</button>
                   <div>{this.state.text}</div>
