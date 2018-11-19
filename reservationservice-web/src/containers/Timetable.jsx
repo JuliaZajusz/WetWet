@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import BigCalendar from 'react-big-calendar-like-google';
 import moment from 'moment';
 import 'moment/locale/pl'
-import { getAppointments } from '../clients/AppointmentClient'
+import {getAppointments} from '../clients/AppointmentClient'
+import {Modal} from "antd";
+import WrappedAppointmentForm from "./AppointmentForm";
 
 
 class Timetable extends Component {
@@ -44,24 +46,41 @@ class Timetable extends Component {
     )
   }
 
+    showModal = (slotInfo) => {
+        console.log(slotInfo)
+        this.setState({
+            visible: true,
+            slotInfo: slotInfo,
+        });
+    }
+
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
   render() {
     return (
       <div className={'margin-md'}>
         <BigCalendar
-          selectable
-          events={this.state.events}
-          defaultView='week'
-          views={this.allViews}
-          scrollToTime={new Date(1970, 1, 1, 6)}
-          defaultDate={Date.now()}
-          onSelectEvent={event => alert(event.title)}
-          onSelectSlot={(slotInfo) => alert(
-            `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-            `\nend: ${slotInfo.end.toLocaleString()}` +
-            `\naction: ${slotInfo.action}`,
-          )}
+            selectable
+            events={this.state.events}
+            defaultView='week'
+            views={this.allViews}
+            scrollToTime={new Date(1970, 1, 1, 6)}
+            defaultDate={Date.now()}
+            onSelectEvent={event => alert(event.title)}
+            onSelectSlot={(slotInfo) => this.showModal(slotInfo)}
 
-          messages={
+            messages={
             {
               date: 'Data',
               time: 'Czas',
@@ -84,6 +103,17 @@ class Timetable extends Component {
             }
           }
         />
+          <Modal
+              title="Basic Modal"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+          >
+              <WrappedAppointmentForm slotInfo={this.state.slotInfo}/>
+              <p>{this.state.slotInfo && this.state.slotInfo.action}</p>
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+          </Modal>
 
       </div>
     )

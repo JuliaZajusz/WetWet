@@ -22,4 +22,8 @@ public class AppointmentService {
     public List<Appointment> getAppointments() {
         return repository.findAll();
     }
+
+    public Appointment createAppointments(Appointment appointment) {
+        return repository.save(appointment);
+    }
 }
