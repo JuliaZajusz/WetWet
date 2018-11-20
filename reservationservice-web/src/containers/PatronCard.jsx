@@ -1,0 +1,60 @@
+import React, { Component } from 'react';
+import PatronForm from './PatronForm'
+import history from '../history'
+import { getPatron } from '../clients/PatronClient'
+import Button from 'antd/es/button/button'
+
+class PatronCard extends Component {
+  state = {
+    patron: null,
+  };
+
+  componentWillMount = () => {
+    if (this.props.history.location.pathname !== '/patron/new') {
+      let path = this.props.history.location.pathname.split('/')
+      getPatron(path[2]).then((res) => this.setState({ patron: res }))
+    }
+
+  }
+
+  render() {
+    let arrayPath = this.props.history.location.pathname.split('/');
+
+    return (
+      <div className={'margin-md'}>
+        {this.props.history.location.pathname === '/patron/new' && <div>
+          <PatronForm onSubmitSuccess={(res) => {
+            this.setState({ patron: res });
+            history.push('/patron/' + res.id)
+          }}/>
+        </div>}
+        {(arrayPath[2] !== 'new' && arrayPath.length <= 3 && this.state.patron) && <div>
+          <div className={'flex-between'}>
+            <h3>{this.state.patron.firstName} {this.state.patron.lastName}</h3>
+            <Button onClick={() => history.push(this.props.history.location.pathname + '/edit')}>Edytuj</Button>
+          </div>
+          <div>
+            {this.state.patron.email}
+          </div>
+          <div>
+            {this.state.patron.phone}
+          </div>
+          <div>
+            {/*TODO Adres, zwierzęta*/}
+          </div>
+        </div>}
+
+        {(arrayPath[1] === 'patron'
+          && arrayPath[3] === 'edit') && <div>
+          <PatronForm data={this.state.patron} onSubmitSuccess={(res) => {
+            this.setState({ patron: res });
+            history.push('/patron/' + res.id)
+          }}/>
+        </div>}
+
+      </div>
+    )
+  }
+}
+
+export default PatronCard;

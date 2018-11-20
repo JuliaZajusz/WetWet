@@ -6,6 +6,7 @@
     "antd": "^3.10.4",
     "axios": "^0.18.0",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "react": "^16.6.0",
     "react-big-calendar-like-google": "^0.0.3",

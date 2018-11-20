@@ -7,6 +7,8 @@ import { Route, Router, Switch } from 'react-router';
 import { Icon, Layout, Menu } from 'antd';
 import history from './history';
 import Timetable from './containers/Timetable'
+import PatronsList from './containers/PatronsList'
+import PatronCard from './containers/PatronCard'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -67,6 +69,8 @@ class App extends Component {
                 <Route exact path='/users' component={EmployeesList}/>
                 <Route exact path='/patients' component={PatientsList}/>
                 <Route exact path='/timetable' component={Timetable}/>
+                <Route exact path='/patrons' component={PatronsList}/>
+                <Route path='/patron/:id' component={PatronCard}/>
                 <Route component={() => <div>
                   <button onClick={() => this.getText()}>get text</button>
                   <div>{this.state.text}</div>
