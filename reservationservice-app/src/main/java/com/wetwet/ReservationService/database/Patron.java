@@ -1,43 +1,41 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.*;
 
+@Entity
 public class Patron {
 
-  
-    /**
-     * null
-     */
-  private long id;
-  
-    /**
-     * null
-     */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
+  private Long id;
+
   private String firstName;
-  
-    /**
-     * null
-     */
+
   private String lastName;
-  
-    /**
-     * null
-     */
+
   private String phone;
-  
-    /**
-     * null
-     */
+
   private String email;
 
+  public Patron() {
+  }
 
-  public long getId() {
+  public Patron(Long id, String firstName, String lastName, String phone, String email) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phone = phone;
+    this.email = email;
+  }
+
+  public Long getId() {
     return id;
   }
 
   public void setId(long id) {
     this.id = id;
   }
-
 
   public String getFirstName() {
     return firstName;

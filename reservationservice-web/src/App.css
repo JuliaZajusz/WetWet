@@ -1,6 +1,13 @@
 @import '~antd/dist/antd.css';
 @import './css/Timetable.css';
+@import './css/PatronsList.css';
 
 .margin-md {
     margin: 16px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
 }
