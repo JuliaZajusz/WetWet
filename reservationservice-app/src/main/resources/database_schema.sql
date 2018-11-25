@@ -17,15 +17,16 @@ CREATE TABLE Employee_Appointment (
   Appointment_ID    int(10) NOT NULL,
   Employee_ID       int(10) NOT NULL);
 CREATE TABLE Appointment (
-  ID                    int(10) NOT NULL AUTO_INCREMENT,
-  Title                 varchar(255) NOT NULL,
-  Description           varchar(255),
-  Cost                  int(10),
-  Date                  date NOT NULL,
-  Start_Time             time(6) NOT NULL,
-  End_Time               time(6) NOT NULL,
-  Address_Point_ID        int(10),
-  Consulting_Room_ID      int(10),
+  ID                 int(10) NOT NULL AUTO_INCREMENT,
+  Title              varchar(255) NOT NULL,
+  Description        varchar(255),
+  Cost               int(10),
+  Date               date NOT NULL,
+  Start_Time         time(6) NOT NULL,
+  End_Time           time(6) NOT NULL,
+  Address_Point_ID   int(10),
+  Consulting_Room_ID int(10),
+  DrugCost           int(10),
   PRIMARY KEY (ID));
 CREATE TABLE Consulting_Room (
   ID               int(10) NOT NULL AUTO_INCREMENT,
@@ -38,13 +39,16 @@ CREATE TABLE Consulting_Room_Inaccessibility (
   End_Time               time(6) NOT NULL,
   Consulting_Room_ID      int(10) NOT NULL);
 CREATE TABLE Drug (
-  ID        int(10) NOT NULL AUTO_INCREMENT,
+  ID        int(10)      NOT NULL AUTO_INCREMENT,
   Producent varchar(255) NOT NULL,
   Name      varchar(255) NOT NULL,
+  Cost      int(10)      NOT NULL,
   PRIMARY KEY (ID));
 CREATE TABLE Appointment_Drug (
   Appointment_ID int(10) NOT NULL,
-  Drug_ID        int(10) NOT NULL);
+  Drug_ID        int(10) NOT NULL,
+  Quantity       int(10) NOT NULL
+);
 CREATE TABLE Patient_Appointment (
   Patient_ID int(10) NOT NULL,
   Appointment_ID  int(10) NOT NULL);
@@ -119,3 +123,46 @@ ALTER TABLE Patron_Address_Point ADD CONSTRAINT `FKPatron_Addr697410` FOREIGN KE
 ALTER TABLE Patron_Address_Point ADD CONSTRAINT `FKPatron_Addr915388` FOREIGN KEY (Address_Point_ID) REFERENCES Address_Point (ID);
 ALTER TABLE Address_Point ADD CONSTRAINT `FKAddressPoint214154` FOREIGN KEY (City_ID) REFERENCES City (ID);
 ALTER TABLE Credentials ADD CONSTRAINT FKCredentials691803 FOREIGN KEY (Employee_ID) REFERENCES Employee (ID);
+
+
+CREATE TRIGGER calc_drug_cost_insert
+  AFTER INSERT
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = new.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = new.Appointment_ID;
+  END;
+
+CREATE TRIGGER calc_drug_cost_update
+  AFTER UPDATE
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = new.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = new.Appointment_ID;
+  END;
+
+CREATE TRIGGER calc_drug_cost_delete
+  AFTER DELETE
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = old.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = old.Appointment_ID;
+  END;
