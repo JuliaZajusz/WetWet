@@ -4,6 +4,9 @@ values ("jkowalski", "Jan", "Kowalski", 1);
 insert into employee (User_name, First_Name, Last_Name, Position_ID)
 values ("aw", "Andrzej", "Wolej", 1);
 
+insert into credentials (login, password_hash, employee_id)
+values ("jkowalski", "09io0987yu87", 1);
+
 insert into Species(Name) values ("Pies");
 insert into Species(Name) values ("Kot");
 insert into Species(Name) values ("Rybka");

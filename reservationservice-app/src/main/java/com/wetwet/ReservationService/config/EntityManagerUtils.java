@@ -18,9 +18,13 @@ public class EntityManagerUtils {
     @Qualifier("secondEntityManager")
     private EntityManager secondDatabase;
 
-//    @Autowired
-//    @Qualifier("thirdEntityManager")
-//    private EntityManager thirdDatabase;
+    @Autowired
+    @Qualifier("thirdEntityManager")
+    private EntityManager thirdDatabase;
+
+    @Autowired
+    @Qualifier("fourthEntityManager")
+    private EntityManager fourthDatabase;
 
     public EntityManager getEm(String url) {
 
@@ -31,9 +35,25 @@ public class EntityManagerUtils {
             return mainDatabase;
         if (url.contains("second"))
             return secondDatabase;
-//        if(url.contains("third"))
-//            return thirdDatabase;
-        return mainDatabase;
+        if (url.contains("third"))
+            return thirdDatabase;
+        return fourthDatabase;
+    }
+
+    public JpaRepositoryFactory getMainDatabaseJpaFactory() {
+        return new JpaRepositoryFactory(mainDatabase);
+    }
+
+    public JpaRepositoryFactory getSecondDatabaseJpaFactory() {
+        return new JpaRepositoryFactory(secondDatabase);
+    }
+
+    public JpaRepositoryFactory getThirdDatabaseJpaFactory() {
+        return new JpaRepositoryFactory(thirdDatabase);
+    }
+
+    public JpaRepositoryFactory getFourthDatabaseJpaFactory() {
+        return new JpaRepositoryFactory(fourthDatabase);
     }
 
     public JpaRepositoryFactory getJpaFactory(String url) {

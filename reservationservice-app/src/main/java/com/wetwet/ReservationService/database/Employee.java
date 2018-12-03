@@ -32,14 +32,23 @@ public class Employee {
   @Column(name = "position_id")
   private Long positionId;
 
-  public Employee(Long id, String firstName, String lastName, Long positionId) {
-    this.id = id;
+
+  public Employee() {
+  }
+
+  public Employee(String userName, String firstName, String lastName, Long positionId) {
+    this.userName = userName;
     this.firstName = firstName;
     this.lastName = lastName;
     this.positionId = positionId;
   }
 
-  public Employee() {
+  public Employee(Long id, String userName, String firstName, String lastName, Long positionId) {
+    this.id = id;
+    this.userName = userName;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.positionId = positionId;
   }
 
 

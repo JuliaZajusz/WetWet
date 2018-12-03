@@ -2,8 +2,10 @@ package com.wetwet.ReservationService.authentication;
 
 import com.wetwet.ReservationService.authentication.security.JwtAuthenticationResponse;
 import com.wetwet.ReservationService.authentication.security.JwtTokenProvider;
+import com.wetwet.ReservationService.database.Credentials;
 import com.wetwet.ReservationService.database.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
     @Autowired
     private AutenticationService autenticationService;
-    //    @Autowired
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,15 +35,17 @@ public class AuthenticationController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-//    @PostMapping("/sign-up")
-//    public ResponseEntity<?> signUp(@RequestBody Employee userVM) {
-//        if(autenticationService.existsByUsername(userVM.getUserName())) {
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signUp(@RequestBody AuthenticationVM userVM) {
+        if (autenticationService.existsByLogin(userVM.getUsername())) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 //        userVM.setPassword(bCryptPasswordEncoder.encode(userVM.getPassword()));
-//        autenticationService.createUser(userVM);
+        Employee e = new Employee("ala", "Alicja", "makota", 1L);
+        Credentials c = autenticationService.createUser(userVM, e);
+        return ResponseEntity.ok(c);
 //        return new ResponseEntity(HttpStatus.OK);
-//    }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationVM userVM) {
@@ -55,11 +59,19 @@ public class AuthenticationController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Employee loggedUser = autenticationService.getUserByUsername(userVM.getUsername()).orElseThrow(() -> new IllegalArgumentException());
+        Credentials loggedUser = autenticationService.getByLogin(userVM.getUsername()).orElseThrow(() -> new IllegalArgumentException());
         String jwt = tokenProvider.generateToken(authentication, loggedUser);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, loggedUser));
     }
 
+
+//    setRepository(context.getRequestURL().toString());
+//        return repository.findAll();
+//}
+
+//    private void setRepository(String url) {
+//        repository = emUtils.getJpaFactory(url).getRepository(EmployeeRepository.class);
+//    }
 }
 
 

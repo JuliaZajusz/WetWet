@@ -1,12 +1,11 @@
 package com.wetwet.ReservationService.authentication.security;
 
-import com.wetwet.ReservationService.authentication.AutenticationService;
-import com.wetwet.ReservationService.database.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,10 +22,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    //	@Autowired
-//	private UserDetailsServiceImpl customUserDetailsService;
     @Autowired
-    private AutenticationService customUserDetailsService;
+    private UserDetailsServiceImpl customUserDetailsService;
+//    @Autowired
+//    private AutenticationService customUserDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
@@ -38,10 +37,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String username = tokenProvider.getUsernameFromJWT(jwt);
 
-                Employee employee = customUserDetailsService.getUserByUsername(username).orElseThrow(() -> new IllegalArgumentException());
-//				UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-//				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(employee, "lalala");
+//                Credentials employee = customUserDetailsService.getByLogin(username).orElseThrow(() -> new IllegalArgumentException());
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(employee, "lalala");
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

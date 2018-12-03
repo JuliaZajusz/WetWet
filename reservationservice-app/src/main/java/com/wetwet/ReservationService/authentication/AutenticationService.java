@@ -1,5 +1,7 @@
 package com.wetwet.ReservationService.authentication;
 
+import com.wetwet.ReservationService.config.EntityManagerUtils;
+import com.wetwet.ReservationService.database.Credentials;
 import com.wetwet.ReservationService.database.Employee;
 import com.wetwet.ReservationService.repository.CredentialsRepository;
 import com.wetwet.ReservationService.repository.EmployeeRepository;
@@ -17,14 +19,29 @@ public class AutenticationService {
     private final PositionRepository positionRepository;
 
 
-    public AutenticationService(EmployeeRepository employeeRepository, CredentialsRepository credentialsRepository, PositionRepository positionRepository) {
-        this.employeeRepository = employeeRepository;
-        this.credentialsRepository = credentialsRepository;
-        this.positionRepository = positionRepository;
+//    public AutenticationService(EmployeeRepository employeeRepository, CredentialsRepository credentialsRepository, PositionRepository positionRepository) {
+//        this.employeeRepository = employeeRepository;
+//        this.credentialsRepository = credentialsRepository;
+//        this.positionRepository = positionRepository;
+//    }
+
+    public AutenticationService(EntityManagerUtils emUtil) {
+        this.employeeRepository = emUtil.getFourthDatabaseJpaFactory().getRepository(EmployeeRepository.class);
+        this.credentialsRepository = emUtil.getFourthDatabaseJpaFactory().getRepository(CredentialsRepository.class);
+        this.positionRepository = emUtil.getFourthDatabaseJpaFactory().getRepository(PositionRepository.class);
     }
 
+    public Optional<Credentials> getByLogin(String login) {
+        return this.credentialsRepository.findByLogin(login);
+    }
 
-    public Optional<Employee> getUserByUsername(String username) {
-        return this.employeeRepository.findByUserName(username);
+    public boolean existsByLogin(String login) {
+        return this.credentialsRepository.findByLogin(login).isPresent();
+    }
+
+    public Credentials createUser(AuthenticationVM userVM, Employee employee) {
+        Employee e = employeeRepository.save(employee);
+        Credentials c = credentialsRepository.save(new Credentials(userVM.getUsername(), userVM.getPassword(), e.getId()));
+        return c;
     }
 }

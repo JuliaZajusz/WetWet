@@ -1,7 +1,7 @@
 package com.wetwet.ReservationService.authentication.security;
 
-import com.wetwet.ReservationService.database.Employee;
-import com.wetwet.ReservationService.repository.EmployeeRepository;
+import com.wetwet.ReservationService.database.Credentials;
+import com.wetwet.ReservationService.repository.CredentialsRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,24 +10,17 @@ import org.springframework.stereotype.Service;
 
 import static java.util.Collections.emptyList;
 
-//import com.wetwet.ReservationService.repository.CredentialsRepository;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-
-//import org.springframework.stereotype.Service;
-//
-//import static java.util.Collections.emptyList;
-//
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private EmployeeRepository employeeRepository;
+    private CredentialsRepository credentialsRepository;
 
-    public UserDetailsServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public UserDetailsServiceImpl(CredentialsRepository credentialsRepository) {
+        this.credentialsRepository = credentialsRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Employee applicationUser = employeeRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        return new User(applicationUser.getUserName(), "ala", emptyList());
+        Credentials applicationUser = credentialsRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        return new User(applicationUser.getLogin(), "ala", emptyList());
     }
 }

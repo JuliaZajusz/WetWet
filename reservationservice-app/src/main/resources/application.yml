@@ -38,6 +38,12 @@ third.db.url: jdbc:mysql://localhost:3306/wetwet
 third.db.username: doctor_user
 third.db.password: doctor_user
 
+#Third Database Connection
+fourth.db.driver: com.mysql.jdbc.Driver
+fourth.db.url: jdbc:mysql://localhost:3306/wetwet
+fourth.db.username: admin_user
+fourth.db.password: admin_user
+
 
 #Hibernate Configurations
 hibernate.dialect: org.hibernate.dialect.MySQL5Dialect

@@ -1,16 +1,15 @@
 package com.wetwet.ReservationService.authentication.security;
 
-import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.database.Credentials;
 
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
-    //    private AuthenticationVM authenticationVM;
-    private Employee authenticationVM;
+    private Credentials authenticationVM;
 
-    public JwtAuthenticationResponse(String accessToken, Employee userVM) {
+    public JwtAuthenticationResponse(String accessToken, Credentials credentials) {
         this.accessToken = accessToken;
-        this.authenticationVM = userVM;
+        this.authenticationVM = credentials;
     }
 
     public String getAccessToken() {
@@ -29,11 +28,11 @@ public class JwtAuthenticationResponse {
         this.tokenType = tokenType;
     }
 
-    public Employee getAuthenticationVM() {
+    public Credentials getAuthenticationVM() {
         return authenticationVM;
     }
 
-    public void setAuthenticationVM(Employee authenticationVM) {
+    public void setAuthenticationVM(Credentials authenticationVM) {
         this.authenticationVM = authenticationVM;
     }
 }
