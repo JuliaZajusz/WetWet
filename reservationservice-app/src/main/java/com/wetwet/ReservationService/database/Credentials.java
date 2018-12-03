@@ -1,22 +1,24 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.*;
 
+@Entity
 public class Credentials {
 
-  
-    /**
-     * null
-     */
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "login")
   private String login;
-  
-    /**
-     * null
-     */
+
+  /**
+   * null
+   */
   private String passwordHash;
-  
-    /**
-     * null
-     */
+
+  /**
+   * null
+   */
   private long employeeId;
 
 

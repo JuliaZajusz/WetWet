@@ -1,14 +1,52 @@
-spring:
-  application:
-    name: reservationservice
-  data:
-    rest:
-      base-path: /api
-  jpa:
-    hibernate:
-      ddl-auto: none
-  datasource:
-    username: springuser
-    password: qwerty123
-spring.datasource.url: jdbc:mysql://localhost:3306/wetwet
-cors.urls: http://localhost:3000
+#spring:
+#  application:
+#    name: reservationservice
+#  data:
+#    rest:
+#      base-path: /api
+#  jpa:
+#    database: default
+#    hibernate:
+#      ddl-auto: none
+#  datasource:
+#    username: not_logged_user
+#    password: not_logged_user
+#    url: jdbc:mysql://localhost:3306/wetwet
+
+#second:
+#  datasource:
+#    username: receptionist_user
+#    password: receptionist_user
+#    url: jdbc:mysql://localhost:3306/wetwet
+
+
+#Main Database Connection
+main.db.driver: com.mysql.jdbc.Driver
+main.db.url: jdbc:mysql://localhost:3306/wetwet
+main.db.username: not_logged_user
+main.db.password: not_logged_user
+
+#Second Database Connection
+second.db.driver: com.mysql.jdbc.Driver
+second.db.url: jdbc:mysql://localhost:3306/wetwet
+second.db.username: receptionist_user
+second.db.password: receptionist_user
+
+#Third Database Connection
+third.db.driver: com.mysql.jdbc.Driver
+third.db.url: jdbc:mysql://localhost:3306/wetwet
+third.db.username: doctor_user
+third.db.password: doctor_user
+
+
+#Hibernate Configurations
+hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+hibernate.show_sql: false
+hibernate.format_sql: false
+entitymanager.packages.to.scan: com.wetwet.ReservationService.database
+connection.release_mode: auto
+
+## Authentication props
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpirationInMs: 3600000

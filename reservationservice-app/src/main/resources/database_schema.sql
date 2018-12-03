@@ -1,8 +1,9 @@
 CREATE TABLE Employee (
-  ID           int(10) NOT NULL AUTO_INCREMENT,
-  First_Name         varchar(255) NOT NULL,
-  Last_Name     varchar(255) NOT NULL,
-  Position_ID int(10) NOT NULL,
+  ID          int(10)      NOT NULL AUTO_INCREMENT,
+  User_Name   varchar(255) NOT NULL,
+  First_Name  varchar(255) NOT NULL,
+  Last_Name   varchar(255) NOT NULL,
+  Position_ID int(10)      NOT NULL,
   PRIMARY KEY (ID));
 CREATE TABLE Position (
   ID  int(10) NOT NULL AUTO_INCREMENT,
@@ -166,3 +167,90 @@ CREATE TRIGGER calc_drug_cost_delete
                     group by ad.Appointment_Id)
     where ID = old.Appointment_ID;
   END;
+
+CREATE INDEX employee_last_name_idx
+  ON employee (last_name);
+CREATE INDEX appointment_date_idx
+  ON appointment (date);
+CREATE INDEX employee_availability_date_idx
+  ON employee_availability (date);
+CREATE INDEX consulting_room_inaccessibility_date_idx
+  ON consulting_room_inaccessibility (date);
+
+
+create user 'not_logged_user'@'localhost'
+  identified by 'not_logged_user';
+create user 'receptionist_user'@'localhost'
+  identified by 'receptionist_user';
+create user 'doctor_user'@'localhost'
+  identified by 'doctor_user';
+create user 'admin_user'@'localhost'
+  identified by 'admin_user';
+
+grant select on wetwet.credentials to 'not_logged_user'@'localhost';
+grant select on wetwet.credentials to 'receptionist_user'@'localhost';
+grant select on wetwet.credentials to 'doctor_user'@'localhost';
+
+grant select, insert, update, delete on wetwet.consulting_room_inaccessibility to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.employee_availability to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.appointment to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.species to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.breed to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.patron to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.address_point to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.street to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.city to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.employee_appointment to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient_appointment to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient_patron to 'receptionist_user'@'localhost';
+grant select, insert, update, delete on wetwet.patron_address_point to 'receptionist_user'@'localhost';
+grant select on wetwet.employee to 'receptionist_user'@'localhost';
+grant select on wetwet.position to 'receptionist_user'@'localhost';
+grant select on wetwet.consulting_room to 'receptionist_user'@'localhost';
+grant select on wetwet.drug to 'receptionist_user'@'localhost';
+grant select on wetwet.appointment_drug to 'receptionist_user'@'localhost';
+grant select on wetwet.Patient_View to 'receptionist_user'@'localhost';
+# ****
+grant select on wetwet.Address_View to 'receptionist_user'@'localhost';
+grant select on wetwet.Employee_Availability_View to 'receptionist_user'@'localhost';
+grant select on wetwet.Consulting_Room_Inaccessibility_View to 'receptionist_user'@'localhost';
+grant select on wetwet.Appointment_View to 'receptionist_user'@'localhost';
+grant select on wetwet.Patron_With_Pets_View to 'receptionist_user'@'localhost';
+# grant select on wetwet.Patron_View  to 'receptionist_user'@'localhost';
+grant select on wetwet.Employee_View to 'receptionist_user'@'localhost';
+# ****
+
+grant select, insert, update, delete on wetwet.consulting_room_inaccessibility to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.employee_availability to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.appointment to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.species to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.breed to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.patron to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.address_point to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.street to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.city to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.employee_appointment to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient_appointment to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.patient_patron to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.patron_address_point to 'doctor_user'@'localhost';
+grant select on wetwet.employee to 'doctor_user'@'localhost';
+grant select on wetwet.position to 'doctor_user'@'localhost';
+grant select on wetwet.consulting_room to 'doctor_user'@'localhost';
+grant select on wetwet.drug to 'doctor_user'@'localhost';
+grant select on wetwet.appointment_drug to 'doctor_user'@'localhost';
+grant select on wetwet.Patient_View to 'doctor_user'@'localhost';
+# ****
+grant select on wetwet.Address_View to 'doctor_user'@'localhost';
+grant select on wetwet.Employee_Availability_View to 'doctor_user'@'localhost';
+grant select on wetwet.Consulting_Room_Inaccessibility_View to 'doctor_user'@'localhost';
+grant select on wetwet.Appointment_View to 'doctor_user'@'localhost';
+grant select on wetwet.Patron_With_Pets_View to 'doctor_user'@'localhost';
+# grant select on wetwet.Patron_View  to 'doctor_user'@'localhost';
+grant select on wetwet.Employee_View to 'doctor_user'@'localhost';
+# ****
+
+
+grant insert, update, delete on wetwet.appointment_drug to 'doctor_user'@'localhost';
+grant select, insert, update, delete on wetwet.* to 'admin_user'@'localhost';
