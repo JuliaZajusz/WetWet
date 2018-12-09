@@ -8,9 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import static java.util.Collections.emptyList;
 
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
     private CredentialsRepository credentialsRepository;
 
@@ -21,6 +24,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Credentials applicationUser = credentialsRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        return new User(applicationUser.getLogin(), "ala", emptyList());
+        return new User(applicationUser.getLogin(), applicationUser.getPasswordHash(), emptyList());
     }
 }

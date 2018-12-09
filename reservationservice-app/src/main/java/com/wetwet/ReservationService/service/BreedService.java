@@ -6,9 +6,11 @@ import com.wetwet.ReservationService.repository.BreedRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class BreedService {
     private final BreedRepository repository;
     private final SpeciesService speciesService;

@@ -19,12 +19,17 @@
 #    password: receptionist_user
 #    url: jdbc:mysql://localhost:3306/wetwet
 
-
 #Main Database Connection
 main.db.driver: com.mysql.jdbc.Driver
 main.db.url: jdbc:mysql://localhost:3306/wetwet
-main.db.username: not_logged_user
-main.db.password: not_logged_user
+main.db.username: user
+main.db.password: user
+
+##Main Database Connection
+#main.db.driver: com.mysql.jdbc.Driver
+#main.db.url: jdbc:mysql://localhost:3306/wetwet
+#main.db.username: not_logged_user
+#main.db.password: not_logged_user
 
 #Second Database Connection
 second.db.driver: com.mysql.jdbc.Driver
@@ -41,8 +46,8 @@ third.db.password: doctor_user
 #Third Database Connection
 fourth.db.driver: com.mysql.jdbc.Driver
 fourth.db.url: jdbc:mysql://localhost:3306/wetwet
-fourth.db.username: admin_user
-fourth.db.password: admin_user
+fourth.db.username: user
+fourth.db.password: user
 
 
 #Hibernate Configurations

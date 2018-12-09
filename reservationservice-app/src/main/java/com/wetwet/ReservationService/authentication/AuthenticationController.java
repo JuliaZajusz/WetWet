@@ -3,7 +3,7 @@ package com.wetwet.ReservationService.authentication;
 import com.wetwet.ReservationService.authentication.security.JwtAuthenticationResponse;
 import com.wetwet.ReservationService.authentication.security.JwtTokenProvider;
 import com.wetwet.ReservationService.database.Credentials;
-import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,30 +36,29 @@ public class AuthenticationController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody AuthenticationVM userVM) {
-        if (autenticationService.existsByLogin(userVM.getUsername())) {
+    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
+        if (autenticationService.existsByLogin(userDTO.getCredentials().getLogin())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-//        userVM.setPassword(bCryptPasswordEncoder.encode(userVM.getPassword()));
-        Employee e = new Employee("ala", "Alicja", "makota", 1L);
-        Credentials c = autenticationService.createUser(userVM, e);
-        return ResponseEntity.ok(c);
-//        return new ResponseEntity(HttpStatus.OK);
+        userDTO.getCredentials().setPassword(bCryptPasswordEncoder.encode(userDTO.getCredentials().getPassword()));
+        Credentials c = autenticationService.createUser(userDTO.getCredentials(), userDTO.getEmployee());
+//        return ResponseEntity.ok(c);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationVM userVM) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody CredentialsDTO userVM) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userVM.getUsername(),
+                        userVM.getLogin(),
                         userVM.getPassword()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Credentials loggedUser = autenticationService.getByLogin(userVM.getUsername()).orElseThrow(() -> new IllegalArgumentException());
+        Credentials loggedUser = autenticationService.getByLogin(userVM.getLogin()).orElseThrow(() -> new IllegalArgumentException());
         String jwt = tokenProvider.generateToken(authentication, loggedUser);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, loggedUser));
     }

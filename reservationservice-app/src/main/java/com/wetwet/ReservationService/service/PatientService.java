@@ -6,10 +6,12 @@ import com.wetwet.ReservationService.repository.PatientRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class PatientService {
     private final PatientRepository repository;
     private final BreedService breedService;
