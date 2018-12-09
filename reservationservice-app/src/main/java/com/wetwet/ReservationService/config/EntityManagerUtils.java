@@ -3,9 +3,12 @@ package com.wetwet.ReservationService.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.util.Collection;
 
 @Component
 public class EntityManagerUtils {
@@ -28,16 +31,26 @@ public class EntityManagerUtils {
 
     public EntityManager getEm(String url) {
 
-        System.out.println("\n*******************\n");
-        System.out.println(url);
-        System.out.println("*******************\n");
-        if (url.contains("main"))
-            return mainDatabase;
-        if (url.contains("second"))
-            return secondDatabase;
-        if (url.contains("third"))
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+//        System.out.println("\n*******************\n");
+//        System.out.println(authorities);
+//        System.out.println("*******************\n");
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
+            System.out.println("fourthDatabase");
+            return fourthDatabase;
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("DOCTOR"))) {
+            System.out.println("thirdDatabase");
             return thirdDatabase;
-        return fourthDatabase;
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("RECEPTIONIST"))) {
+            System.out.println("secondDatabase");
+            return secondDatabase;
+        }
+        System.out.println("mainDatabase");
+        return mainDatabase;
     }
 
     public JpaRepositoryFactory getMainDatabaseJpaFactory() {

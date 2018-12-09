@@ -24,8 +24,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsServiceImpl customUserDetailsService;
-//    @Autowired
-//    private AutenticationService customUserDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
@@ -37,10 +35,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String username = tokenProvider.getUsernameFromJWT(jwt);
 
-//                Credentials employee = customUserDetailsService.getByLogin(username).orElseThrow(() -> new IllegalArgumentException());
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(employee, "lalala");
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

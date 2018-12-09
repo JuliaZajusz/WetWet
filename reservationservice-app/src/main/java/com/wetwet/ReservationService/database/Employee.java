@@ -1,97 +1,100 @@
 package com.wetwet.ReservationService.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "EMPLOYEE")
 public class Employee {
 
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
 
 
-  @Column(name = "user_name")
-  private String userName;
+    @Column(name = "user_name")
+    private String userName;
 
 
-  @Column(name = "first_name")
-  private String firstName;
+    @Column(name = "first_name")
+    private String firstName;
 
-  /**
-   * null
-   */
-  @Column(name = "last_name")
-  private String lastName;
+    /**
+     * null
+     */
+    @Column(name = "last_name")
+    private String lastName;
 
-  /**
-   * null
-   */
-  @Column(name = "position_id")
-  private Long positionId;
-
-
-  public Employee() {
-  }
-
-  public Employee(String userName, String firstName, String lastName, Long positionId) {
-    this.userName = userName;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.positionId = positionId;
-  }
-
-  public Employee(Long id, String userName, String firstName, String lastName, Long positionId) {
-    this.id = id;
-    this.userName = userName;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.positionId = positionId;
-  }
+    /**
+     * null
+     */
+    @Column(name = "position_id")
+    private Long positionId;
 
 
-  public Long getId() {
-    return id;
-  }
+    public Employee() {
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Employee(String userName, String firstName, String lastName, Long positionId) {
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.positionId = positionId;
+    }
 
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+    public Employee(Long id, String userName, String firstName, String lastName, Long positionId) {
+        this.id = id;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.positionId = positionId;
+    }
 
 
-  public String getLastName() {
-    return lastName;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
 
-  public Long getPositionId() {
-    return positionId;
-  }
+    public String getLastName() {
+        return lastName;
+    }
 
-  public void setPositionId(Long positionId) {
-    this.positionId = positionId;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public Long getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(Long positionId) {
+        this.positionId = positionId;
+    }
 
 }

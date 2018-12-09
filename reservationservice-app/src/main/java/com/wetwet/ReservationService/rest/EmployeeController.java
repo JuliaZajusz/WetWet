@@ -29,8 +29,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/all")
-    public List<Employee> getAllEmployees() {
+//    @PreAuthorize("hasAuthority('NONE')")
+    public List<Employee> getAllEmployees(HttpServletRequest request) {
+//        System.out.println(request.isUserInRole("NONE"));
+//        System.out.println(request.isUserInRole("ROLE_NONE"));
+//        System.out.println(context.getUserPrincipal());
+//        System.out.println(context.getRemoteUser());
+//        System.out.println(context.isUserInRole("NONE"));
+//        System.out.println(context.isUserInRole("ROLE_NONE"));
 
+//        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)
+//                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 //        return employeeService.getEmployees();
         setRepository(context.getRequestURL().toString());
         return repository.findAll();
