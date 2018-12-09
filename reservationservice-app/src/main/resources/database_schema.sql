@@ -126,6 +126,7 @@ ALTER TABLE Address_Point ADD CONSTRAINT `FKAddressPoint214154` FOREIGN KEY (Cit
 ALTER TABLE Credentials ADD CONSTRAINT FKCredentials691803 FOREIGN KEY (Employee_ID) REFERENCES Employee (ID);
 
 
+delimiter //
 CREATE TRIGGER calc_drug_cost_insert
   AFTER INSERT
   ON appointment_drug
@@ -139,6 +140,8 @@ CREATE TRIGGER calc_drug_cost_insert
                     group by ad.Appointment_Id)
     where ID = new.Appointment_ID;
   END;
+//
+
 
 CREATE TRIGGER calc_drug_cost_update
   AFTER UPDATE
@@ -153,6 +156,7 @@ CREATE TRIGGER calc_drug_cost_update
                     group by ad.Appointment_Id)
     where ID = new.Appointment_ID;
   END;
+//
 
 CREATE TRIGGER calc_drug_cost_delete
   AFTER DELETE
@@ -167,7 +171,12 @@ CREATE TRIGGER calc_drug_cost_delete
                     group by ad.Appointment_Id)
     where ID = old.Appointment_ID;
   END;
+//
 
+delimiter ;
+
+CREATE INDEX patron_last_name_idx
+  ON patron (last_name);
 CREATE INDEX employee_last_name_idx
   ON employee (last_name);
 CREATE INDEX appointment_date_idx
@@ -184,11 +193,14 @@ create user 'receptionist_user'@'localhost'
   identified by 'receptionist_user';
 create user 'doctor_user'@'localhost'
   identified by 'doctor_user';
+create user 'drug_service_user'@'localhost'
+  identified by 'drug_service_user';
 create user 'admin_user'@'localhost'
   identified by 'admin_user';
 
 grant select on wetwet.credentials to 'not_logged_user'@'localhost';
 grant select on wetwet.employee to 'not_logged_user'@'localhost';
+grant select on wetwet.position to 'not_logged_user'@'localhost';
 grant select on wetwet.credentials to 'receptionist_user'@'localhost';
 grant select on wetwet.credentials to 'doctor_user'@'localhost';
 
@@ -254,4 +266,6 @@ grant select on wetwet.Employee_View to 'doctor_user'@'localhost';
 
 
 grant insert, update, delete on wetwet.appointment_drug to 'doctor_user'@'localhost';
-grant select, insert, update, delete on wetwet.* to 'admin_user'@'localhost';
+grant select, insert, update, delete on wetwet.drug to 'drug_service_user'@'localhost';
+grant ALL PRIVILEGES on wetwet.* to 'admin_user'@'localhost'
+WITH GRANT OPTION;

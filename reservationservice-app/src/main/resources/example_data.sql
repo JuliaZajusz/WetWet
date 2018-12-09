@@ -1,4 +1,11 @@
-insert into position (Type) values("receptionist");
+insert into position (Type)
+values ("none");
+insert into position (Type) values ("receptionist");
+insert into position (Type)
+values ("doctor");
+insert into position (Type)
+values ("admin");
+
 insert into employee (User_Name, First_Name, Last_Name, Position_ID)
 values ("jkowalski", "Jan", "Kowalski", 1);
 insert into employee (User_name, First_Name, Last_Name, Position_ID)
