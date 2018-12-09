@@ -5,14 +5,14 @@ import com.wetwet.ReservationService.database.Employee;
 
 public class UserDTO {
     private Employee employee;
-    private CredentialsDTO credentialsDTO;
+    private CredentialsDTO credentials;
 
     public UserDTO() {
     }
 
     public UserDTO(CredentialsDTO credentialsDTO, Employee employee) {
         this.employee = employee;
-        this.credentialsDTO = credentialsDTO;
+        this.credentials = credentialsDTO;
     }
 
     public Employee getEmployee() {
@@ -20,6 +20,6 @@ public class UserDTO {
     }
 
     public CredentialsDTO getCredentials() {
-        return credentialsDTO;
+        return credentials;
     }
 }

@@ -1,6 +1,7 @@
 import { client } from './RestClient'
 import axios from 'axios'
 import history from '../history'
+import jwt_decode from 'jwt-decode';
 
 export const setToken = (token) => {
   localStorage.setItem('TOKEN', token)
@@ -37,4 +38,10 @@ export const logIn = async (credentials) => {
   const response = await client.post(`/authorization/login`, credentials)
   setToken(response.data.accessToken)
   return response;
+}
+
+export const getPositionFromToken = () => {
+  let token = localStorage.getItem('TOKEN');
+  let position = token ? jwt_decode(token).employee.positionId : null;
+  return position;
 }
