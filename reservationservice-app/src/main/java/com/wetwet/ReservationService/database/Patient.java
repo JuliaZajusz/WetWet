@@ -1,8 +1,9 @@
 package com.wetwet.ReservationService.database;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
 
 public class Patient implements Serializable{
 
-
+  @Column(name = "ID")
   private @Id @GeneratedValue long id;
 
   private String name;
@@ -21,8 +22,10 @@ public class Patient implements Serializable{
 
   private String coat;
 
+  @Column(name = "special_characters")
   private String specialCharacters;
 
+  @Column(name = "breed_id")
   private long breedId;
 
   public Patient(){

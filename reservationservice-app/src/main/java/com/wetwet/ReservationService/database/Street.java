@@ -1,22 +1,15 @@
 package com.wetwet.ReservationService.database;
 
 
+import javax.persistence.Column;
+
 public class Street {
 
-  
-    /**
-     * null
-     */
   private long id;
-  
-    /**
-     * null
-     */
+
   private String name;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "city_id")
   private long cityId;
 
 

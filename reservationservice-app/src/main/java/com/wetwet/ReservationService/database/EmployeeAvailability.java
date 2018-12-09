@@ -1,27 +1,20 @@
 package com.wetwet.ReservationService.database;
 
 
+import javax.persistence.Column;
+
 public class EmployeeAvailability {
 
-  
-    /**
-     * null
-     */
+
   private java.sql.Date date;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "start_time")
   private java.sql.Time startTime;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "end_time")
   private java.sql.Time endTime;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "employee_id")
   private long employeeId;
 
 

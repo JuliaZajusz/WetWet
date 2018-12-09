@@ -11,9 +11,6 @@ public class Position {
     @Column(name = "ID")
     private long id;
 
-    /**
-     * null
-     */
     private String type;
 
 

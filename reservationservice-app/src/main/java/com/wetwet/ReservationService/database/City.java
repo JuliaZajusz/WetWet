@@ -3,15 +3,8 @@ package com.wetwet.ReservationService.database;
 
 public class City {
 
-  
-    /**
-     * null
-     */
   private long id;
-  
-    /**
-     * null
-     */
+
   private String name;
 
 

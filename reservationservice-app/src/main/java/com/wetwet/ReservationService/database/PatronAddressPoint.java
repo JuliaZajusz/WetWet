@@ -1,17 +1,15 @@
 package com.wetwet.ReservationService.database;
 
 
+import javax.persistence.Column;
+
 public class PatronAddressPoint {
 
-  
-    /**
-     * null
-     */
+
+  @Column(name = "patron_id")
   private long patronId;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "address_point_id")
   private long addressPointId;
 
 

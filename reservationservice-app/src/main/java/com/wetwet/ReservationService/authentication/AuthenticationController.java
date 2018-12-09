@@ -47,18 +47,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody CredentialsDTO userVM) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody CredentialsDTO credentialsDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userVM.getLogin(),
-                        userVM.getPassword()
+                        credentialsDTO.getLogin(),
+                        credentialsDTO.getPassword()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Credentials loggedUser = autenticationService.getByLogin(userVM.getLogin()).orElseThrow(() -> new IllegalArgumentException());
+        Credentials loggedUser = autenticationService.getByLogin(credentialsDTO.getLogin()).orElseThrow(() -> new IllegalArgumentException());
         String jwt = tokenProvider.generateToken(authentication, loggedUser);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, loggedUser));
     }
