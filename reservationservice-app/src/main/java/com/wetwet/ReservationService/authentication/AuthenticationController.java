@@ -58,7 +58,7 @@ public class AuthenticationController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Credentials loggedUser = autenticationService.getByLogin(credentialsDTO.getLogin()).orElseThrow(() -> new IllegalArgumentException());
+        UserDTO loggedUser = autenticationService.getUserDTOByLogin(credentialsDTO.getLogin());
         String jwt = tokenProvider.generateToken(authentication, loggedUser);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, loggedUser));
     }

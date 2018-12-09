@@ -188,6 +188,7 @@ create user 'admin_user'@'localhost'
   identified by 'admin_user';
 
 grant select on wetwet.credentials to 'not_logged_user'@'localhost';
+grant select on wetwet.employee to 'not_logged_user'@'localhost';
 grant select on wetwet.credentials to 'receptionist_user'@'localhost';
 grant select on wetwet.credentials to 'doctor_user'@'localhost';
 

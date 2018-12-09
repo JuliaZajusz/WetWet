@@ -1,6 +1,6 @@
 package com.wetwet.ReservationService.authentication.security;
 
-import com.wetwet.ReservationService.database.Credentials;
+import com.wetwet.ReservationService.dto.UserDTO;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
-    public String generateToken(Authentication authentication, Credentials credentials) {
+    public String generateToken(Authentication authentication, UserDTO userDTO) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
@@ -30,7 +30,7 @@ public class JwtTokenProvider {
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .claim("user", credentials)
+                .claim("user", userDTO)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

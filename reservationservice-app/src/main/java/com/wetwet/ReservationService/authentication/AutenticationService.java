@@ -2,6 +2,7 @@ package com.wetwet.ReservationService.authentication;
 
 import com.wetwet.ReservationService.database.Credentials;
 import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.dto.UserDTO;
 import com.wetwet.ReservationService.repository.CredentialsRepository;
 import com.wetwet.ReservationService.repository.EmployeeRepository;
 import com.wetwet.ReservationService.repository.PositionRepository;
@@ -32,6 +33,14 @@ public class AutenticationService {
 
     public Optional<Credentials> getByLogin(String login) {
         return this.credentialsRepository.findByLogin(login);
+    }
+
+
+    public UserDTO getUserDTOByLogin(String login) {
+        Credentials credentials = this.credentialsRepository.findByLogin(login).orElseThrow(() -> new IllegalArgumentException());
+        Employee employee = this.employeeRepository.findById(credentials.getEmployeeId()).orElseThrow(() -> new IllegalArgumentException());
+        CredentialsDTO credentialsDTO = new CredentialsDTO(credentials);
+        return new UserDTO(credentialsDTO, employee);
     }
 
     public boolean existsByLogin(String login) {
