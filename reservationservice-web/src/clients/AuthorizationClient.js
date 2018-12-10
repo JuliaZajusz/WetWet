@@ -21,13 +21,12 @@ export const signOut = () => {
   history.push('/login')
 }
 
-// client.interceptors.response.use(null, function (err) {
-//   if (err.response.status === 401) {
-//     console.log('401')
-//     signOut()
-//   }
-//   return Promise.reject(err)
-// })
+client.interceptors.response.use(null, function (err) {
+  if (err.response.status === 401) {
+    signOut()
+  }
+  return Promise.reject(err)
+})
 
 
 export const createAccount = async (user) => {
@@ -40,8 +39,13 @@ export const logIn = async (credentials) => {
   return response;
 }
 
+export const resetPassword = async (credentials) => {
+  const response = await client.post(`/authorization/resetPassword`, credentials)
+  return response;
+}
+
 export const getPositionFromToken = () => {
   let token = localStorage.getItem('TOKEN');
-  let position = token ? jwt_decode(token).employee.positionId : null;
-  return position;
+  let positionId = token ? jwt_decode(token).user.employee.positionId : null;
+  return client.get(`/api/position/${positionId}`);
 }

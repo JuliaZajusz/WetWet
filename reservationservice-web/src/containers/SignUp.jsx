@@ -30,7 +30,7 @@ class SignUp extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <Form onSubmit={this.handleSubmit} className="login-form login-form--sign-up margin-md">
         <FormItem>
           {getFieldDecorator('login', {
             rules: [{ required: true, message: 'Podaj login!' }],
@@ -80,9 +80,8 @@ class SignUp extends Component {
 
         <FormItem>
           <Button type="primary" htmlType="submit" className="login-form-button">
-            Sign up
+            Utwórz
           </Button>
-          Or <a href="/login">log in</a>
         </FormItem>
       </Form>
     );

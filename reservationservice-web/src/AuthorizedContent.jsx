@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 // import './AuthorizedContent.css';
-import { getHello } from './clients/HelloClient'
 import EmployeesList from './containers/EmloyeesList'
 import PatientsList from './containers/PatientsList'
 import { Route, Router, Switch } from 'react-router';
@@ -10,7 +9,7 @@ import Timetable from './containers/Timetable'
 import PatronsList from './containers/PatronsList'
 import PatronCard from './containers/PatronCard'
 import SignUp from './containers/SignUp'
-import { signOut } from './clients/AuthorizationClient'
+import { getPositionFromToken, signOut } from './clients/AuthorizationClient'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -18,19 +17,18 @@ const SubMenu = Menu.SubMenu;
 
 class AuthorizedContent extends Component {
 
-  getText() {
-    getHello().then((res) => {
-      this.setState({ text: res })
+  componentWillMount() {
+    getPositionFromToken().then((res) => {
+      this.setState({ role: res.data.type.toUpperCase() })
     })
   }
 
   state = {
     collapsed: false,
-    text: 'tu pojawi się tekst jeśli klikniesz przycisk',
+    role: 'NONE',
   };
 
   onCollapse = (collapsed) => {
-    console.log(collapsed);
     this.setState({ collapsed });
   }
 
@@ -45,7 +43,7 @@ class AuthorizedContent extends Component {
               onCollapse={this.onCollapse}
             >
               <div className="logo"/>
-              <Menu theme="dark" defaultSelectedKeys={['/patients']} mode="inline" onClick={(item) => {
+              <Menu theme="dark" mode="inline" onClick={(item) => {
                 history.push(item.key)
               }}>
                 <Menu.Item key="/patients">
@@ -60,10 +58,11 @@ class AuthorizedContent extends Component {
                   <Icon type="calendar"/>
                   <span>Terminarz</span>
                 </Menu.Item>
+                {this.state.role !== 'NONE' &&
                 <Menu.Item key="/users">
                   <Icon type="team"/>
                   <span>Użytkownicy</span>
-                </Menu.Item>
+                </Menu.Item>}
               </Menu>
               <Menu theme="dark" mode="inline" onClick={() => {
                 signOut();
@@ -75,7 +74,6 @@ class AuthorizedContent extends Component {
               </Menu>
             </Sider>
             <Layout>
-
               <Switch>
                 <Route exact path='/users' component={EmployeesList}/>
                 <Route exact path='/patients' component={PatientsList}/>
@@ -83,10 +81,6 @@ class AuthorizedContent extends Component {
                 <Route exact path='/patrons' component={PatronsList}/>
                 <Route path='/patron/:id' component={PatronCard}/>
                 <Route exact path='/users/add' component={SignUp}/>
-                <Route component={() => <div>
-                  <button onClick={() => this.getText()}>get text</button>
-                  <div>{this.state.text}</div>
-                </div>}/>
               </Switch>
             </Layout>
           </Layout>

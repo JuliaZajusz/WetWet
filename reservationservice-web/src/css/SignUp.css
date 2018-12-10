@@ -1,9 +1,9 @@
 @import '~antd/dist/antd.css';
 
-.login-form {
+.login-form--sign-up {
     max-width: 300px;
-    margin: auto;
-    padding-top: 20vh;
+    /*margin: auto;*/
+    padding-top: 0;
 }
 
 .login-form-forgot {

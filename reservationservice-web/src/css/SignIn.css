@@ -1,6 +1,6 @@
 @import '~antd/dist/antd.css';
 
-.login-form {
+.login-form--sign-in {
     max-width: 300px;
     margin: auto;
     padding-top: 20vh;
