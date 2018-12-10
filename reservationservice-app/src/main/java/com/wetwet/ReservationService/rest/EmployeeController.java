@@ -1,10 +1,7 @@
 package com.wetwet.ReservationService.rest;
 
-import com.wetwet.ReservationService.config.EntityManagerUtils;
 import com.wetwet.ReservationService.database.Employee;
-import com.wetwet.ReservationService.repository.EmployeeRepository;
 import com.wetwet.ReservationService.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +13,12 @@ import java.util.List;
 @RequestMapping(path = "api/employee")
 public class EmployeeController {
     private final EmployeeService employeeService;
-    @Autowired
-    private EmployeeRepository repository;
-    @Autowired
-    private HttpServletRequest context;
-    @Autowired
-    private EntityManagerUtils emUtils;
+//    @Autowired
+//    private EmployeeRepository repository;
+//    @Autowired
+//    private HttpServletRequest context;
+//    @Autowired
+//    private EntityManagerUtils emUtils;
 
 
     EmployeeController(EmployeeService employeeService) {
@@ -40,12 +37,12 @@ public class EmployeeController {
 
 //        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)
 //                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-//        return employeeService.getEmployees();
-        setRepository(context.getRequestURL().toString());
-        return repository.findAll();
+        return employeeService.getEmployees();
+//        setRepository();
+//        return repository.findAll();
     }
 
-    private void setRepository(String url) {
-        repository = emUtils.getJpaFactory(url).getRepository(EmployeeRepository.class);
-    }
+//    private void setRepository() {
+//        repository = emUtils.getJpaFactory().getRepository(EmployeeRepository.class);
+//    }
 }

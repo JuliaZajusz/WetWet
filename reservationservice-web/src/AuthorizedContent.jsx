@@ -9,6 +9,8 @@ import history from './history';
 import Timetable from './containers/Timetable'
 import PatronsList from './containers/PatronsList'
 import PatronCard from './containers/PatronCard'
+import SignUp from './containers/SignUp'
+import { signOut } from './clients/AuthorizationClient'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,7 +45,7 @@ class AuthorizedContent extends Component {
               onCollapse={this.onCollapse}
             >
               <div className="logo"/>
-              <Menu theme="dark" defaultSelectedKeys={['/calendar']} mode="inline" onClick={(item) => {
+              <Menu theme="dark" defaultSelectedKeys={['/patients']} mode="inline" onClick={(item) => {
                 history.push(item.key)
               }}>
                 <Menu.Item key="/patients">
@@ -63,6 +65,14 @@ class AuthorizedContent extends Component {
                   <span>Użytkownicy</span>
                 </Menu.Item>
               </Menu>
+              <Menu theme="dark" mode="inline" onClick={() => {
+                signOut();
+              }}>
+                <Menu.Item key="/login">
+                  <Icon type="lock"/>
+                  <span>Wyloguj</span>
+                </Menu.Item>
+              </Menu>
             </Sider>
             <Layout>
 
@@ -72,6 +82,7 @@ class AuthorizedContent extends Component {
                 <Route exact path='/timetable' component={Timetable}/>
                 <Route exact path='/patrons' component={PatronsList}/>
                 <Route path='/patron/:id' component={PatronCard}/>
+                <Route exact path='/users/add' component={SignUp}/>
                 <Route component={() => <div>
                   <button onClick={() => this.getText()}>get text</button>
                   <div>{this.state.text}</div>

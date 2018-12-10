@@ -21,13 +21,13 @@ export const signOut = () => {
   history.push('/login')
 }
 
-client.interceptors.response.use(null, function (err) {
-  if (err.response.status === 401) {
-    console.log('401')
-    signOut()
-  }
-  return Promise.reject(err)
-})
+// client.interceptors.response.use(null, function (err) {
+//   if (err.response.status === 401) {
+//     console.log('401')
+//     signOut()
+//   }
+//   return Promise.reject(err)
+// })
 
 
 export const createAccount = async (user) => {

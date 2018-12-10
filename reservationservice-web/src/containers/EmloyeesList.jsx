@@ -41,7 +41,7 @@ class EmployeesList extends Component {
   }
 
   addEmployee() {
-
+    history.push('/users/add')
   }
 }
 

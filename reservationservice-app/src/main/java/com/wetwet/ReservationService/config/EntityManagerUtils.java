@@ -29,14 +29,14 @@ public class EntityManagerUtils {
     @Qualifier("fourthEntityManager")
     private EntityManager fourthDatabase;
 
-    public EntityManager getEm(String url) {
+    public EntityManager getEm() {
 
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-//        System.out.println("\n*******************\n");
-//        System.out.println(authorities);
-//        System.out.println("*******************\n");
+        System.out.println("\n*******************\n");
+        System.out.println(authorities);
+        System.out.println("*******************\n");
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             System.out.println("fourthDatabase");
             return fourthDatabase;
@@ -69,8 +69,8 @@ public class EntityManagerUtils {
         return new JpaRepositoryFactory(fourthDatabase);
     }
 
-    public JpaRepositoryFactory getJpaFactory(String url) {
-        return new JpaRepositoryFactory(getEm(url));
+    public JpaRepositoryFactory getJpaFactory() {
+        return new JpaRepositoryFactory(getEm());
     }
 
 }

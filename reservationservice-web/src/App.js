@@ -6,7 +6,6 @@ import { Layout, Menu } from 'antd';
 import history from './history';
 import AuthorizedContent from './AuthorizedContent'
 import SignIn from './containers/SignIn'
-import SignUp from './containers/SignUp'
 import PrivateRoute from './PrivateRoute'
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -35,7 +34,6 @@ class App extends Component {
       <Router history={history}>
               <Switch>
                 <Route exact path='/login' component={SignIn}/>
-                <Route exact path='/signUp' component={SignUp}/>
                 <PrivateRoute path='/' component={AuthorizedContent}/>
               </Switch>
       </Router>

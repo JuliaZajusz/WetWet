@@ -35,7 +35,7 @@ class SignUp extends Component {
           {getFieldDecorator('login', {
             rules: [{ required: true, message: 'Podaj login!' }],
           })(
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>} placeholder="Email"/>,
+            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>} placeholder="Login"/>,
           )}
         </FormItem>
         <FormItem>
