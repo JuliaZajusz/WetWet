@@ -4,10 +4,12 @@ CREATE TABLE Employee (
 	Last_Name				varchar(255) NOT NULL,
 	Position_ID				int(10) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Position (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Type					varchar(255) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Employee_Availability (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
     Date					date,
@@ -15,26 +17,31 @@ CREATE TABLE Employee_Availability (
 	End_Time				time NOT NULL,
 	Employee_ID				int(10) NOT NULL,
     PRIMARY KEY (ID));
+
 CREATE TABLE Employee_Appointment (
 	Appointment_ID			int(10) NOT NULL,
 	Employee_ID				int(10) NOT NULL,
 	PRIMARY KEY (Appointment_ID, Employee_ID));
+
 CREATE TABLE Appointment (
-	ID						int(10) NOT NULL AUTO_INCREMENT,
-	Title					varchar(255) NOT NULL,
-	Description				text,
-	Cost					int(10) NOT NULL,
-    Date					date,
-	Start_Time				time NOT NULL,
-	End_Time				time NOT NULL,
-	Address_Point_ID		int(10),
-	Consulting_Room_ID		int(10),
-	PRIMARY KEY (ID));
+  ID                 int(10) NOT NULL AUTO_INCREMENT,
+  Title              varchar(255) NOT NULL,
+  Description        text,
+	Cost               int(10) NOT NULL,
+  Date               date NOT NULL,
+  Start_Time         time NOT NULL,
+  End_Time           time NOT NULL,
+  Address_Point_ID   int(10),
+  Consulting_Room_ID int(10),
+  DrugCost           int(10),
+  PRIMARY KEY (ID));
+
 CREATE TABLE Consulting_Room (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Room_Number				varchar(10) NOT NULL,
 	Description				text,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Consulting_Room_Inaccessibility (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
     Date					date,
@@ -42,19 +49,25 @@ CREATE TABLE Consulting_Room_Inaccessibility (
 	End_Time				time NOT NULL,
 	Consulting_Room_ID		int(10) NOT NULL,
     PRIMARY KEY (ID));
+
 CREATE TABLE Drug (
-	ID						int(10) NOT NULL AUTO_INCREMENT,
-	Producent				varchar(255) NOT NULL,
-	Name					varchar(255) NOT NULL,
-	PRIMARY KEY (ID));
+  ID        int(10)      NOT NULL AUTO_INCREMENT,
+  Producent varchar(255) NOT NULL,
+  Name      varchar(255) NOT NULL,
+  Cost      int(10)      NOT NULL,
+  PRIMARY KEY (ID));
+
 CREATE TABLE Appointment_Drug (
-	Appointment_ID			int(10) NOT NULL,
-	Drug_ID					int(10) NOT NULL,
-    PRIMARY KEY (Appointment_ID, Drug_ID));
+  Appointment_ID int(10) NOT NULL,
+  Drug_ID        int(10) NOT NULL,
+  Quantity       int(10) NOT NULL,
+  PRIMARY KEY (Appointment_ID, Drug_ID));
+
 CREATE TABLE Patient_Appointment (
 	Patient_ID				int(10) NOT NULL,
 	Appointment_ID			int(10) NOT NULL,
     PRIMARY KEY (Patient_ID, Appointment_ID));
+
 CREATE TABLE Patient (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255),
@@ -64,51 +77,61 @@ CREATE TABLE Patient (
 	Special_Characters		text,
 	Breed_ID				int(10),
 	PRIMARY KEY (ID));
+
 CREATE TABLE Breed (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255) NOT NULL,
 	Species_ID				int(10) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Species (
 	ID 						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Patron (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
-	First_Name				varchar(255) NOT NULL,
-	Last_Name				varchar(255) NOT NULL,
+	First_Name		varchar(255) NOT NULL,
+	Last_Name			varchar(255) NOT NULL,
 	Phone					varchar(30),
 	Email					varchar(255),
 	PRIMARY KEY (ID));
+
 CREATE TABLE Patient_Patron (
 	Patron_ID				int(10) NOT NULL,
 	Patient_ID				int(10) NOT NULL,
     PRIMARY KEY (Patron_ID, Patient_ID));
+
 CREATE TABLE Address_Point (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	House_Apartment_Number	varchar(20) NOT NULL,
 	Street_ID				int(10),
 	City_ID					int(10),
 	PRIMARY KEY (ID));
+
 CREATE TABLE Street (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255) NOT NULL,
 	City_ID					int(10) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE City (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255) NOT NULL,
 	PRIMARY KEY (ID));
+
 CREATE TABLE Patron_Address_Point (
 	Patron_ID				int(10) NOT NULL,
 	Address_Point_ID		int(10) NOT NULL,
     PRIMARY KEY (Patron_ID, Address_Point_ID));
+
 CREATE TABLE Credentials (
-	Employee_ID				integer(10) NOT NULL,
-	Login					varchar(20) NOT NULL,
-	Password_Salt			char(64) NOT NULL,
-    Password_Hash			char(64) NOT NULL,
-    PRIMARY KEY (Employee_ID));
+	Employee_ID       integer(10) NOT NULL,
+	Login             varchar(20) NOT NULL,
+	Password_Salt     char(64) NOT NULL,
+  Password_Hash     char(64) NOT NULL,
+  PRIMARY KEY (Employee_ID));
+
 ALTER TABLE Patient ADD CONSTRAINT FKBreedInPatient FOREIGN KEY (Breed_ID) REFERENCES Breed (ID);
 ALTER TABLE Patient_Patron ADD CONSTRAINT FKPatientInPatient_Patron FOREIGN KEY (Patient_ID) REFERENCES Patient (ID);
 ALTER TABLE Patient_Patron ADD CONSTRAINT FKPatronInPatient_Patron FOREIGN KEY (Patron_ID) REFERENCES Patron (ID);
@@ -137,7 +160,6 @@ ALTER TABLE Patron ADD INDEX (last_name);
 ALTER TABLE Appointment ADD INDEX (date);
 ALTER TABLE Employee_Availability ADD INDEX (date);
 ALTER TABLE Consulting_Room_Inaccessibility ADD INDEX (date);
-
 
 # Patient_View
 CREATE VIEW Patient_View AS
@@ -233,3 +255,45 @@ SELECT employee.ID, employee.first_name, employee.last_name, position.ID AS posi
 		FROM employee, position
         WHERE employee.position_ID = position.ID;
 
+
+CREATE TRIGGER calc_drug_cost_insert
+  AFTER INSERT
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = new.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = new.Appointment_ID;
+  END;
+
+CREATE TRIGGER calc_drug_cost_update
+  AFTER UPDATE
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = new.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = new.Appointment_ID;
+  END;
+
+CREATE TRIGGER calc_drug_cost_delete
+  AFTER DELETE
+  ON appointment_drug
+  FOR EACH ROW
+  BEGIN
+    update appointment
+    set DrugCost = (select sum(ad.Quantity * d.Cost) as Koszt
+                    from appointment_drug ad
+                           inner join drug d on d.Id = ad.Drug_ID
+                    where appointment_id = old.Appointment_ID
+                    group by ad.Appointment_Id)
+    where ID = old.Appointment_ID;
+  END;

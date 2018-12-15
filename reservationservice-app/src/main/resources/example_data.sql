@@ -63,3 +63,26 @@ insert into patient_appointment(Patient_ID, appointment_ID) values( 2, 2);
 
 insert into employee_appointment(appointment_ID, Employee_ID) values( 1, 1);
 insert into employee_appointment(appointment_ID, Employee_ID) values( 2, 2);
+
+insert into consulting_room(room_number, description) values ("001", "Gabinet chirurgiczny");
+insert into consulting_room(room_number, description) values ("002", "Gabinet lekarski");
+
+insert into address_point(House_Apartment_Number) values ("52");
+
+insert into drug (Producent, Name, Cost)
+values ("Bayer", "Wapno", 5);
+insert into drug (Producent, Name, Cost)
+values ("Polpharma OTC", "Etopiryna", 7);
+
+
+insert into appointment_drug
+values (1, 1, 3);
+insert into appointment_drug
+values (1, 2, 1);
+
+insert into appointment_drug
+values (2, 1, 1);
+insert into appointment_drug
+values (2, 1, 1);
+insert into appointment_drug
+values (2, 2, 1);
