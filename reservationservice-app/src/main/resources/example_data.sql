@@ -79,10 +79,10 @@ insert into appointment_drug
 values (1, 1, 3);
 insert into appointment_drug
 values (1, 2, 1);
-
-insert into appointment_drug
-values (2, 1, 1);
 insert into appointment_drug
 values (2, 1, 1);
 insert into appointment_drug
 values (2, 2, 1);
+
+INSERT INTO credentials (Employee_ID, Login, Password_Salt, Password_Hash) values (1, "abcd", "1234123412341234123412341234123412341234123412341234123412341234", "1234123412341234123412341234123412341234123412341234123412341234");
+INSERT INTO credentials (Employee_ID, Login, Password_Salt, Password_Hash) values (2, "dcba", "2234123412341234123412341234123412341234123412341234123412341234", "2234123412341234123412341234123412341234123412341234123412341234");

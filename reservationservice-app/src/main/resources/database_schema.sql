@@ -127,7 +127,7 @@ CREATE TABLE Patron_Address_Point (
 
 CREATE TABLE Credentials (
 	Employee_ID       integer(10) NOT NULL,
-	Login             varchar(20) NOT NULL,
+	Login             varchar(20) NOT NULL UNIQUE,
 	Password_Salt     char(64) NOT NULL,
   Password_Hash     char(64) NOT NULL,
   PRIMARY KEY (Employee_ID));
@@ -150,16 +150,16 @@ ALTER TABLE Employee_Appointment ADD CONSTRAINT FKEmployeeInEmployee_Appointment
 ALTER TABLE Consulting_Room_Inaccessibility ADD CONSTRAINT FKConsulting_RoomInCRI FOREIGN KEY (Consulting_Room_ID) REFERENCES Consulting_Room (ID);
 ALTER TABLE Employee ADD CONSTRAINT FKPositionInEmployee FOREIGN KEY (Position_ID) REFERENCES Position (ID);
 ALTER TABLE Employee_Availability ADD CONSTRAINT FKEmployeeInEmployee_Availability FOREIGN KEY (Employee_ID) REFERENCES Employee (ID);
-ALTER TABLE Breed ADD CONSTRAINT FKSpeciesInBreed FOREIGN KEY (Species_ID) REFERENCES Species (ID);
+ALTER TABLE Breed ADD CONSTRAINT FKSpeciesInBreed FOREIGN KEY (Species_ID) REFERENCES Species (ID) ON DELETE CASCADE;
 ALTER TABLE Patron_Address_Point ADD CONSTRAINT FKPatronInPAP FOREIGN KEY (Patron_ID) REFERENCES Patron (ID);
 ALTER TABLE Patron_Address_Point ADD CONSTRAINT FKAddress_PointInPAP FOREIGN KEY (Address_Point_ID) REFERENCES Address_Point (ID);
 ALTER TABLE Address_Point ADD CONSTRAINT FKCityInAddress_Point FOREIGN KEY (City_ID) REFERENCES City (ID);
 ALTER TABLE Credentials ADD CONSTRAINT FKEmployeeInCredentials FOREIGN KEY (Employee_ID) REFERENCES Employee (ID);
 
 ALTER TABLE Patron ADD INDEX (last_name);
-ALTER TABLE Appointment ADD INDEX (date);
-ALTER TABLE Employee_Availability ADD INDEX (date);
-ALTER TABLE Consulting_Room_Inaccessibility ADD INDEX (date);
+ALTER TABLE Appointment ADD INDEX (date DESC);
+ALTER TABLE Employee_Availability ADD INDEX (date DESC);
+ALTER TABLE Consulting_Room_Inaccessibility ADD INDEX (date DESC);
 
 # Patient_View
 CREATE VIEW Patient_View AS
@@ -256,6 +256,8 @@ SELECT employee.ID, employee.first_name, employee.last_name, position.ID AS posi
         WHERE employee.position_ID = position.ID;
 
 
+delimiter //
+
 CREATE TRIGGER calc_drug_cost_insert
   AFTER INSERT
   ON appointment_drug
@@ -268,7 +270,7 @@ CREATE TRIGGER calc_drug_cost_insert
                     where appointment_id = new.Appointment_ID
                     group by ad.Appointment_Id)
     where ID = new.Appointment_ID;
-  END;
+  END;//
 
 CREATE TRIGGER calc_drug_cost_update
   AFTER UPDATE
@@ -282,7 +284,7 @@ CREATE TRIGGER calc_drug_cost_update
                     where appointment_id = new.Appointment_ID
                     group by ad.Appointment_Id)
     where ID = new.Appointment_ID;
-  END;
+  END;//
 
 CREATE TRIGGER calc_drug_cost_delete
   AFTER DELETE
@@ -296,4 +298,6 @@ CREATE TRIGGER calc_drug_cost_delete
                     where appointment_id = old.Appointment_ID
                     group by ad.Appointment_Id)
     where ID = old.Appointment_ID;
-  END;
+  END;//
+
+delimiter ;
