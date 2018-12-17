@@ -1,63 +1,85 @@
 package com.wetwet.ReservationService.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity
+@Table(name = "EMPLOYEE")
 public class Employee {
 
-  
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
     /**
      * null
      */
-  private long id;
-  
+    @Column(name = "last_name")
+    private String lastName;
+
     /**
      * null
      */
-  private String firstName;
-  
-    /**
-     * null
-     */
-  private String lastName;
-  
-    /**
-     * null
-     */
-  private long positionId;
+    @Column(name = "position_id")
+    private Long positionId;
 
 
-  public long getId() {
-    return id;
-  }
+    public Employee() {
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public Employee(String firstName, String lastName, Long positionId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.positionId = positionId;
+    }
 
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public Employee(Long id, String firstName, String lastName, Long positionId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.positionId = positionId;
+    }
 
 
-  public long getPositionId() {
-    return positionId;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setPositionId(long positionId) {
-    this.positionId = positionId;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public Long getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(Long positionId) {
+        this.positionId = positionId;
+    }
 
 }

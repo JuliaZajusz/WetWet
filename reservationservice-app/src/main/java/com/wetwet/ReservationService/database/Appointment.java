@@ -8,54 +8,29 @@ import java.sql.Time;
 @Table(name = "appointment")
 public class Appointment {
 
-
-    /**
-     * null
-     */
     @Id
     @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
-    /**
-     * null
-     */
     private String title;
 
-    /**
-     * null
-     */
     private String description;
 
-    /**
-     * null
-     */
     private Long cost;
 
-    /**
-     * null
-     */
     private java.sql.Date date;
 
-    /**
-     * null
-     */
+    @Column(name = "start_time")
     private java.sql.Time startTime;
 
-    /**
-     * null
-     */
-
+    @Column(name = "end_time")
     private java.sql.Time endTime;
 
-    /**
-     * null
-     */
+    @Column(name = "address_point_id")
     private Long addressPointId;
 
-    /**
-     * null
-     //     */
+    @Column(name = "consulting_room_id")
     private Long consultingRoomId;
 
     public Appointment(String title, String description, long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {

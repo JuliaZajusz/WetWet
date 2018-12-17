@@ -6,6 +6,15 @@
     margin: 16px;
 }
 
+.ml-lg {
+    margin-left: 16px;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .flex-between {
     display: flex;
     justify-content: space-between;

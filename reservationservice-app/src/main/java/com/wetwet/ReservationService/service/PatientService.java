@@ -4,14 +4,18 @@ import com.wetwet.ReservationService.database.Patient;
 import com.wetwet.ReservationService.dto.PatientDTO;
 import com.wetwet.ReservationService.repository.PatientRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class PatientService {
-    private final PatientRepository repository;
+    @Autowired
+    private PatientRepository repository;
     private final BreedService breedService;
 
     public PatientService(PatientRepository repository, BreedService breedService) {

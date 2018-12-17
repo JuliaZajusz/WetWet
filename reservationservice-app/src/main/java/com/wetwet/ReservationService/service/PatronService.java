@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PatronService {
-    private final PatronRepository repository;
+    private PatronRepository repository;
 
     public PatronService(PatronRepository repository) {
         this.repository = repository;

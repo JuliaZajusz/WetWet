@@ -1,35 +1,34 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.*;
 
+@Entity
 public class Position {
 
-  
-    /**
-     * null
-     */
-  private long id;
-  
-    /**
-     * null
-     */
-  private String type;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private long id;
+
+    private String type;
 
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
-  public String getType() {
-    return type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public void setType(String type) {
-    this.type = type;
-  }
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }

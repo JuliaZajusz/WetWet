@@ -1,7 +1,17 @@
-insert into position (Type) values("receptionist");
+insert into position (Type)
+values ("none");
+insert into position (Type)
+values ("receptionist");
+insert into position (Type)
+values ("doctor");
+insert into position (Type)
+values ("admin");
 
 insert into employee (First_Name, Last_Name, Position_ID) values ("Jan", "Kowalski", 1);
 insert into employee (First_Name, Last_Name, Position_ID) values ("Andrzej", "Wolej", 1);
+
+insert into credentials (login, password_hash, employee_id)
+values ("jkowalski", "09io0987yu87", 1);
 
 insert into employee_availability(Date, Start_Time, End_Time, Employee_ID) values (DATE("2018-11-10"), TIME("10:00:00"), TIME("14:00:00"), 1);
 insert into employee_availability(Date, Start_Time, End_Time, Employee_ID) values (DATE("2018-11-10"), TIME("16:00:00"), TIME("20:00:00"), 1);
@@ -83,6 +93,6 @@ values (1, 2, 1);
 insert into appointment_drug
 values (2, 1, 1);
 insert into appointment_drug
-values (2, 1, 1);
-insert into appointment_drug
 values (2, 2, 1);
+
+

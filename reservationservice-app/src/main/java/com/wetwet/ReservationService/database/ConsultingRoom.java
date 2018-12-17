@@ -1,22 +1,15 @@
 package com.wetwet.ReservationService.database;
 
 
+import javax.persistence.Column;
+
 public class ConsultingRoom {
 
-
-    /**
-     * null
-     */
     private Long id;
 
-    /**
-     * null
-     */
+    @Column(name = "room_number")
   private String roomNumber;
 
-    /**
-     * null
-     */
   private String description;
 
 
