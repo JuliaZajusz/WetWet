@@ -2,12 +2,16 @@ package com.wetwet.ReservationService.database;
 
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class ConsultingRoom {
 
-    private Long id;
+  @Id
+  private Long id;
 
-    @Column(name = "room_number")
+  @Column(name = "room_number")
   private String roomNumber;
 
   private String description;

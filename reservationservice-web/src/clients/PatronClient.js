@@ -1,7 +1,7 @@
 import { client } from './RestClient'
 
 export const getPatrons = async () => {
-  const response = await client.get(`/api/patron/all`);
+  const response = await client.get(`/api/patron/allWithDetails`);
   return response.data
 };
 

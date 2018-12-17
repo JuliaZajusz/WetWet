@@ -1,30 +1,31 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Drug {
 
-  
-    /**
-     * null
-     */
-  private long id;
-  
-    /**
-     * null
-     */
+
+  @Id
+  private Long id;
+
+  /**
+   * null
+   */
   private String producent;
-  
-    /**
-     * null
-     */
+
+  /**
+   * null
+   */
   private String name;
 
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
