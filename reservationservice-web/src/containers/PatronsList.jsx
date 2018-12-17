@@ -57,8 +57,6 @@ class PatronsList extends Component {
                size="medium"
                onRowClick={(patron) => history.push('/patron/' + patron.id)}
         />
-        data.map((patron) => <div>
-      </div>)
       </div>
     )
   }

@@ -1,0 +1,43 @@
+package com.wetwet.ReservationService.authentication;
+
+import com.wetwet.ReservationService.database.Credentials;
+import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.dto.UserDTO;
+import com.wetwet.ReservationService.repository.CredentialsRepository;
+import com.wetwet.ReservationService.repository.EmployeeRepository;
+import com.wetwet.ReservationService.repository.PositionRepository;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+@Service
+@Transactional
+public class AutenticationService {
+    private final EmployeeRepository employeeRepository;
+    private final CredentialsRepository credentialsRepository;
+    private final PositionRepository positionRepository;
+
+
+    public AutenticationService(EmployeeRepository employeeRepository, CredentialsRepository credentialsRepository, PositionRepository positionRepository) {
+        this.employeeRepository = employeeRepository;
+        this.credentialsRepository = credentialsRepository;
+        this.positionRepository = positionRepository;
+    }
+
+    public UserDTO getUserDTOByLogin(String login) {
+        Credentials credentials = this.credentialsRepository.findByLogin(login).orElseThrow(() -> new IllegalArgumentException());
+        Employee employee = this.employeeRepository.findById(credentials.getEmployeeId()).orElseThrow(() -> new IllegalArgumentException());
+        CredentialsDTO credentialsDTO = new CredentialsDTO(credentials);
+        return new UserDTO(credentialsDTO, employee);
+    }
+
+    public boolean existsByLogin(String login) {
+        return this.credentialsRepository.findByLogin(login).isPresent();
+    }
+
+    public Credentials createUser(CredentialsDTO userVM, Employee employee) {
+        Employee e = employeeRepository.save(employee);
+        Credentials c = credentialsRepository.save(new Credentials(userVM.getLogin(), userVM.getPassword(), e.getId()));
+        return c;
+    }
+}

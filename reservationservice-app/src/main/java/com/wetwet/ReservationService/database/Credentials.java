@@ -1,23 +1,31 @@
 package com.wetwet.ReservationService.database;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Credentials {
 
-  
-    /**
-     * null
-     */
+
+  @Id
+  @Column(name = "login")
   private String login;
-  
-    /**
-     * null
-     */
+
+  @Column(name = "password_hash")
   private String passwordHash;
-  
-    /**
-     * null
-     */
-  private long employeeId;
+
+  @Column(name = "employee_id")
+  private Long employeeId;
+
+  public Credentials(String login, String passwordHash, Long employeeId) {
+    this.login = login;
+    this.passwordHash = passwordHash;
+    this.employeeId = employeeId;
+  }
+
+  public Credentials() {
+  }
 
 
   public String getLogin() {
@@ -38,11 +46,11 @@ public class Credentials {
   }
 
 
-  public long getEmployeeId() {
+  public Long getEmployeeId() {
     return employeeId;
   }
 
-  public void setEmployeeId(long employeeId) {
+  public void setEmployeeId(Long employeeId) {
     this.employeeId = employeeId;
   }
 

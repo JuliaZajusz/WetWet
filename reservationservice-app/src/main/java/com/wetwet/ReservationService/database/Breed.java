@@ -1,25 +1,26 @@
 package com.wetwet.ReservationService.database;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
 public class Breed implements Serializable{
 
-  
+
     /**
      * null
      */
   private @Id @GeneratedValue long id;
-  
+
     /**
      * null
      */
   private String name;
 
-  /**
-   * null
-   */
+    @Column(name = "species_id")
   private long speciesId;
 
     public Breed() {

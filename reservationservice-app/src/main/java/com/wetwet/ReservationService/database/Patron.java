@@ -10,13 +10,17 @@ public class Patron {
   @Column(name = "ID")
   private Long id;
 
-  private String firstName;
+    @Column(name = "first_name")
+    private String firstName;
 
-  private String lastName;
+    @Column(name = "last_name")
+    private String lastName;
 
-  private String phone;
+    @Column(name = "phone")
+    private String phone;
 
-  private String email;
+    @Column(name = "email")
+    private String email;
 
   public Patron() {
   }
