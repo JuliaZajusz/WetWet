@@ -1,7 +1,9 @@
 package com.wetwet.ReservationService.service;
 
 import com.wetwet.ReservationService.database.Patient;
+import com.wetwet.ReservationService.database.PatientPatron;
 import com.wetwet.ReservationService.dto.PatientDTO;
+import com.wetwet.ReservationService.repository.PatientPatronRepository;
 import com.wetwet.ReservationService.repository.PatientRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +12,25 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class PatientService {
     @Autowired
-    private PatientRepository repository;
+    private PatientRepository patientRepository;
+    private PatientPatronRepository patientPatronRepository;
     private final BreedService breedService;
 
-    public PatientService(PatientRepository repository, BreedService breedService) {
-        this.repository = repository;
+    public PatientService(PatientRepository patientRepository, PatientPatronRepository patientPatronRepository, BreedService breedService) {
+        this.patientRepository = patientRepository;
+        this.patientPatronRepository = patientPatronRepository;
         this.breedService = breedService;
     }
 
     public List<PatientDTO> getPatients(){
         List<PatientDTO> patients = new ArrayList<>();
-        for(Patient patient : repository.findAll()){
+        for (Patient patient : patientRepository.findAll()) {
             PatientDTO tmp = new PatientDTO();
             BeanUtils.copyProperties(patient, tmp);
             tmp.setBreed(breedService.getBreedDTOById(patient.getBreedId()));
@@ -35,5 +40,15 @@ public class PatientService {
     }
     public PatientDTO getPatientById(long id){
         return getPatients().stream().filter(patient -> patient.getId() == id).findFirst().get();
+    }
+
+    public List<Patient> getPatientsByPatronId(long id) {
+        List<PatientPatron> patientPatrons = patientPatronRepository.getPatientPatronByPatronId(id);
+        List<Long> patientsIds = patientPatrons
+                .stream()
+                .map(patientPatron -> patientPatron.getPatientId()).collect(Collectors.toList());
+        return patientRepository.findAll().stream()
+                .filter(patient -> patientsIds.contains(patient.getId()))
+                .collect(Collectors.toList());
     }
 }

@@ -2,30 +2,45 @@ package com.wetwet.ReservationService.database;
 
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
+@Entity
+@IdClass(PatientPatronPrimaryKey.class)
 public class PatientPatron {
 
-    @Column(name = "patron_id")
-  private long patronId;
+  @Id
+  @Column(name = "patron_id")
+  private Long patronId;
 
-    @Column(name = "patient_id")
-  private long patientId;
+  @Id
+  @Column(name = "patient_id")
+  private Long patientId;
+
+  public PatientPatron() {
+  }
+
+  public PatientPatron(Long patronId, Long patientId) {
+    this.patronId = patronId;
+    this.patientId = patientId;
+  }
 
 
-  public long getPatronId() {
+  public Long getPatronId() {
     return patronId;
   }
 
-  public void setPatronId(long patronId) {
+  public void setPatronId(Long patronId) {
     this.patronId = patronId;
   }
 
 
-  public long getPatientId() {
+  public Long getPatientId() {
     return patientId;
   }
 
-  public void setPatientId(long patientId) {
+  public void setPatientId(Long patientId) {
     this.patientId = patientId;
   }
 

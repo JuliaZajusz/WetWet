@@ -1,14 +1,12 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.Patron;
+import com.wetwet.ReservationService.dto.PatronWithPetsDTO;
 import com.wetwet.ReservationService.service.PatronService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/patron")
@@ -24,15 +22,22 @@ public class PatronController {
         return patronService.getPatrons();
     }
 
+    @GetMapping("/allWithDetails")
+    public List<PatronWithPetsDTO> getAllPatronsWithDetails() {
+        return patronService.getPatronsWithDetails();
+    }
+
 
     @GetMapping(path = "/{id}")
     @ResponseBody
-    public ResponseEntity<Patron> getPatronById(@PathVariable Long id) {
-        Optional<Patron> patron = patronService.getPatronById(id);
-        if (patron.isPresent()) {
-            return new ResponseEntity<>(patron.get(), null, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+//    public ResponseEntity<Patron> getPatronById(@PathVariable Long id) {
+    public PatronWithPetsDTO getPatronById(@PathVariable Long id) {
+//        Optional<PatronWithPetsDTO> patron = patronService.getPatronById(id);
+//        if (patron.isPresent()) {
+//            return new ResponseEntity<>(patron.get(), null, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+        return patronService.getPatronById(id);
     }
 
     @PostMapping()

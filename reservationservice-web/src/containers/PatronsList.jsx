@@ -37,9 +37,9 @@ class PatronsList extends Component {
     },
     {
       title: 'Zwierzęta',
-      dataIndex: 'patients',
+      dataIndex: 'pets',
       key: 'patients',
-      render: text => <a href="">{text}</a>,
+      render: pets => <div>{pets.map((pet) => <span><a href={'/patient/' + pet.id}>{pet.name}</a><br/></span>)}</div>,
     }];
 
 
