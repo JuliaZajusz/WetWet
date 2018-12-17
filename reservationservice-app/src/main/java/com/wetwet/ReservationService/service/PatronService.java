@@ -35,7 +35,7 @@ public class PatronService {
         }
         PatronWithPetsDTO p = new PatronWithPetsDTO(patron.get());
         p.setPets(patientService.getPatientsByPatronId(id));
-        p.setAddresses(addressPointService.getAddressById(id));
+        p.setAddresses(addressPointService.getAddressByPatronId(id));
         return p;
     }
 

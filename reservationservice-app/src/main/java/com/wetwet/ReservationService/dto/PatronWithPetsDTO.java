@@ -1,6 +1,5 @@
 package com.wetwet.ReservationService.dto;
 
-import com.wetwet.ReservationService.database.AddressPoint;
 import com.wetwet.ReservationService.database.Patient;
 import com.wetwet.ReservationService.database.Patron;
 
@@ -20,12 +19,12 @@ public class PatronWithPetsDTO {
 
     private List<Patient> pets;
 
-    private List<AddressPoint> addresses;
+    private List<AddressDTO> addresses;
 
     public PatronWithPetsDTO() {
     }
 
-    public PatronWithPetsDTO(Long id, String firstName, String lastName, String phone, String email, List<Patient> pets, List<AddressPoint> addresses) {
+    public PatronWithPetsDTO(Long id, String firstName, String lastName, String phone, String email, List<Patient> pets, List<AddressDTO> addresses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -91,11 +90,11 @@ public class PatronWithPetsDTO {
         this.pets = pets;
     }
 
-    public List<AddressPoint> getAddresses() {
+    public List<AddressDTO> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<AddressPoint> addresses) {
+    public void setAddresses(List<AddressDTO> addresses) {
         this.addresses = addresses;
     }
 }

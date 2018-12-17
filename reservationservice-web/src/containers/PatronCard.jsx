@@ -40,7 +40,24 @@ class PatronCard extends Component {
             {this.state.patron.phone}
           </div>
           <div>
-            {/*TODO Adres, zwierzęta*/}
+            Zwierzęta:
+            {this.state.patron.pets.map((pet) => {
+              return <div>
+                {pet.name}
+              </div>
+            })}
+          </div>
+          <div>
+            Adresy:
+            {this.state.patron.addresses.map((address) => {
+              return <div>
+                {address.street && address.street.name + ' '}
+
+                {address.street && address.houseAppartmentNumber + ', '}
+                {address.city && address.city.name + ' '}
+                {!address.street && address.houseAppartmentNumber}
+              </div>
+            })}
           </div>
         </div>}
 
