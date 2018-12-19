@@ -9,7 +9,7 @@ import java.sql.Time;
 public class Appointment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
@@ -33,7 +33,8 @@ public class Appointment {
     @Column(name = "consulting_room_id")
     private Long consultingRoomId;
 
-    public Appointment(String title, String description, long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {
+    public Appointment(Long id, String title, String description, long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.cost = cost;
@@ -47,7 +48,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -115,7 +116,7 @@ public class Appointment {
         this.consultingRoomId = consultingRoomId;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

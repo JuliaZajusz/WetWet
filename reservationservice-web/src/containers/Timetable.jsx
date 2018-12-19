@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar-like-google';
 import moment from 'moment';
 import 'moment/locale/pl'
-import { getAppointments } from '../clients/AppointmentClient'
+import { deleteAppointment, getAppointments } from '../clients/AppointmentClient'
+import { Modal } from 'antd';
+import WrappedAppointmentForm from './AppointmentForm';
+import { getConsultingRooms } from '../clients/ConsultingRoomClient'
+import AppointmentCard from './AppointmentCard'
 
 
 class Timetable extends Component {
   allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
-  state = { events: [] }
+  state = { events: [], consultingRooms: [], slotInfo: { action: null }, appointmentId: null }
 
   getRandomColor = () => {
     let letters = '0123456789ABCDEF';
@@ -23,6 +27,10 @@ class Timetable extends Component {
     BigCalendar.setLocalizer(
       BigCalendar.momentLocalizer(moment),
     );
+    this.loadAppointments()
+  }
+
+  loadAppointments() {
     let appointments = {};
     let newEvents = [];
     getAppointments().then((res) => {
@@ -39,29 +47,72 @@ class Timetable extends Component {
           }
           return event
         });
-        this.setState({ events: newEvents })
+        this.setState({ events: newEvents, appointments: appointments })
       },
     )
+  }
+
+  getAppointment(slot) {
+    let appointmentId = null;
+    let matchingEvents = this.state.events
+      .map((event, idx) => {
+        return { id: idx, ...event }
+      })
+      .filter((event) => {
+        return moment(slot.start).format('YYYY-MM-DD HH') === moment(event.start).format('YYYY-MM-DD HH')
+      })
+      .map((event) => event.id);
+    appointmentId = ((this.state.appointmentId == matchingEvents[0]) && matchingEvents[1]) ? matchingEvents[1] : matchingEvents[0];
+    return appointmentId;
+  }
+
+  showModal = (slotInfo) => {
+        this.setState({
+          appointmentId: this.getAppointment(slotInfo),
+            visible: true,
+            slotInfo: slotInfo,
+        });
+    getConsultingRooms().then((res) => this.setState({ consultingRooms: res }))
+    }
+
+    handleOk = (e) => {
+        this.setState({
+            visible: false,
+          edit: false,
+        });
+      this.loadAppointments()
+    }
+
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+          edit: false,
+        });
+    }
+
+  handleDelete = () => {
+    deleteAppointment(this.state.appointments[this.state.appointmentId].id)
+      .then(() => {
+        this.handleOk();
+      })
   }
 
   render() {
     return (
       <div className={'margin-md'}>
         <BigCalendar
-          selectable
-          events={this.state.events}
-          defaultView='week'
-          views={this.allViews}
-          scrollToTime={new Date(1970, 1, 1, 6)}
-          defaultDate={Date.now()}
-          onSelectEvent={event => alert(event.title)}
-          onSelectSlot={(slotInfo) => alert(
-            `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-            `\nend: ${slotInfo.end.toLocaleString()}` +
-            `\naction: ${slotInfo.action}`,
-          )}
+            selectable
+            events={this.state.events}
+            defaultView='week'
+            views={this.allViews}
+            scrollToTime={new Date(1970, 1, 1, 6)}
+            defaultDate={Date.now()}
+            onSelectSlot={(slotInfo) => this.showModal(slotInfo)}
+          // onSelectEvent={event => alert(event.title)}
+          // onDoubleClickEvent={(a)=> console.log(a)}
+          // onSelecting={(a)=> console.log('onSelecting', a)}
 
-          messages={
+            messages={
             {
               date: 'Data',
               time: 'Czas',
@@ -84,6 +135,40 @@ class Timetable extends Component {
             }
           }
         />
+        {this.state.slotInfo.action === 'click' && this.state.appointmentId ?
+          <Modal
+            title="Wizyta"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[]}
+          >
+            <AppointmentCard
+              edit={this.state.edit}
+              appointment={this.state.appointments[this.state.appointmentId]}
+              slotInfo={this.state.slotInfo}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              onDelete={this.handleDelete}
+              consultingRooms={this.state.consultingRooms}
+              onEnableEdit={() => this.setState({ edit: true })}
+            />
+          </Modal>
+          :
+          <Modal
+            title="Umawianie wizyty"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[]}
+          >
+            <WrappedAppointmentForm
+              consultingRooms={this.state.consultingRooms}
+              slotInfo={this.state.slotInfo}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}/>
+          </Modal>
+        }
 
       </div>
     )

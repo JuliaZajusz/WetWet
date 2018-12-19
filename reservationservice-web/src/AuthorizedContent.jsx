@@ -43,9 +43,9 @@ class AuthorizedContent extends Component {
               onCollapse={this.onCollapse}
             >
               <div className="logo"/>
-              <Menu theme="dark" mode="inline" onClick={(item) => {
+              <Menu theme="dark" mode="inline" onClick={(item) =>
                 history.push(item.key)
-              }}>
+              }>
                 <Menu.Item key="/patients">
                   <Icon type="smile"/>
                   <span>Pacjenci</span>
@@ -64,9 +64,9 @@ class AuthorizedContent extends Component {
                   <span>Użytkownicy</span>
                 </Menu.Item>}
               </Menu>
-              <Menu theme="dark" mode="inline" onClick={() => {
-                signOut();
-              }}>
+              <Menu theme="dark" mode="inline" onClick={() =>
+                signOut()
+              }>
                 <Menu.Item key="/login">
                   <Icon type="lock"/>
                   <span>Wyloguj</span>
@@ -77,9 +77,9 @@ class AuthorizedContent extends Component {
               <Switch>
                 <Route exact path='/users' component={EmployeesList}/>
                 <Route exact path='/patients' component={PatientsList}/>
-                <Route exact path='/timetable' component={Timetable}/>
+                <Route path='/timetable' component={Timetable}/>
                 <Route exact path='/patrons' component={PatronsList}/>
-                <Route path='/patron/:id' component={PatronCard}/>
+                <Route exact path='/patron/:id' component={PatronCard}/>
                 <Route exact path='/users/add' component={SignUp}/>
               </Switch>
             </Layout>

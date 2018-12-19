@@ -13,7 +13,7 @@ class SignIn extends Component {
       if (!err) {
         logIn({ login: values.login, password: values.password })
           .then(() => {
-              history.push('/patients')
+            history.push('/timetable')
             },
           )
       }
