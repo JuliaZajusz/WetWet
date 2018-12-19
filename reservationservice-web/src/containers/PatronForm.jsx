@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
 import { addPatron, updatePatron } from '../clients/PatronClient'
 import history from '../history'
 import _ from 'lodash'
+import WrappedAddressForm from './AddressForm'
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class PatronForm extends Component {
-  state = {
-    confirmDirty: false,
-    autoCompleteResult: [],
-  };
 
+  constructor(props) {
+    super();
+    this.state = {
+      confirmDirty: false,
+      autoCompleteResult: [],
+      pets: _.get(props, 'data.pets') || [],
+      addresses: _.get(props, 'data.addresses') || [],
+    };
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -120,6 +127,44 @@ class PatronForm extends Component {
               <Input/>,
             )}
           </FormItem>
+          {this.state.pets.map((pet) => {
+            return <FormItem label={pet.name}>
+              <Button onClick={() => this.handleDeletePet(pet.id)}>Usuń</Button>
+            </FormItem>
+          })}
+          {/*<FormItem>*/}
+          <div>
+            Zwierzęta:
+            {/*{this.state.pets.map((pet) => {*/}
+            {/*return <div>*/}
+            {/*{pet.name}*/}
+            {/*<Button onClick={()=> this.handleDeletePet(pet.id)}>Usuń</Button>*/}
+            {/*</div>*/}
+            {/*})}*/}
+          </div>
+          <FormItem>
+            <Select
+              onChange={(id) => this.handleAddPet(id)}
+            >
+              <Option value="rmb">RMB</Option>
+              <Option value="dollar">Dollar</Option>
+            </Select>
+          </FormItem>
+          <div>
+            Adresy:
+            {this.state.addresses.map((address) => {
+              return <div>
+                {address.street && address.street.name + ' '}
+
+                {address.street && address.houseAppartmentNumber + ', '}
+                {address.city && address.city.name + ' '}
+                {!address.street && address.houseAppartmentNumber}
+
+                <WrappedAddressForm address={address}/>
+              </div>
+            })}
+          </div>
+          {/*</FormItem>*/}
           <FormItem {...tailFormItemLayout}>
             <Button type="secondary" htmlType="button" onClick={() => this.handleCancel()}>Anuluj</Button>
             <Button type="primary" htmlType="submit">Zapisz</Button>
@@ -128,6 +173,15 @@ class PatronForm extends Component {
 
       </div>
     )
+  }
+
+  handleDeletePet(id) {
+    let newPets = this.state.pets.filter((pet) => pet.id !== id)
+    this.setState({ pets: newPets })
+  }
+
+  handleAddPet(id) {
+    console.log(id)
   }
 }
 
