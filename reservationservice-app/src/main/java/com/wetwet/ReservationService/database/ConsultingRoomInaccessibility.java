@@ -2,54 +2,63 @@ package com.wetwet.ReservationService.database;
 
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
+@Entity
+@IdClass(DatePrimaryKey.class)
 public class ConsultingRoomInaccessibility {
 
-  private java.sql.Date date;
+    @Id
+    private java.sql.Date date;
 
+    @Id
     @Column(name = "start_time")
-  private java.sql.Time startTime;
+    private java.sql.Time startTime;
 
+    @Id
     @Column(name = "end_time")
-  private java.sql.Time endTime;
+    private java.sql.Time endTime;
 
+    @Id
     @Column(name = "consulting_room_id")
-  private long consultingRoomId;
+    private long consultingRoomId;
 
 
-  public java.sql.Date getDate() {
-    return date;
-  }
+    public java.sql.Date getDate() {
+        return date;
+    }
 
-  public void setDate(java.sql.Date date) {
-    this.date = date;
-  }
-
-
-  public java.sql.Time getStartTime() {
-    return startTime;
-  }
-
-  public void setStartTime(java.sql.Time startTime) {
-    this.startTime = startTime;
-  }
+    public void setDate(java.sql.Date date) {
+        this.date = date;
+    }
 
 
-  public java.sql.Time getEndTime() {
-    return endTime;
-  }
+    public java.sql.Time getStartTime() {
+        return startTime;
+    }
 
-  public void setEndTime(java.sql.Time endTime) {
-    this.endTime = endTime;
-  }
+    public void setStartTime(java.sql.Time startTime) {
+        this.startTime = startTime;
+    }
 
 
-  public long getConsultingRoomId() {
-    return consultingRoomId;
-  }
+    public java.sql.Time getEndTime() {
+        return endTime;
+    }
 
-  public void setConsultingRoomId(long consultingRoomId) {
-    this.consultingRoomId = consultingRoomId;
-  }
+    public void setEndTime(java.sql.Time endTime) {
+        this.endTime = endTime;
+    }
+
+
+    public long getConsultingRoomId() {
+        return consultingRoomId;
+    }
+
+    public void setConsultingRoomId(long consultingRoomId) {
+        this.consultingRoomId = consultingRoomId;
+    }
 
 }

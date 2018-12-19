@@ -21,6 +21,11 @@ class AppointmentController {
         return appointmentService.createAppointments(appointment);
     }
 
+    @DeleteMapping("/{id}")
+    void addAppointment(@PathVariable Long id) {
+        appointmentService.deleteAppointment(id);
+    }
+
     @GetMapping("/all")
     List<Appointment> getAppointments() {
         return appointmentService.getAppointments();
