@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 @Entity
-@IdClass(DatePrimaryKey.class)
+@IdClass(ConsultingRoomInaccessibilityPrimaryKey.class)
 public class ConsultingRoomInaccessibility {
 
     @Id

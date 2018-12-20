@@ -2,19 +2,27 @@ package com.wetwet.ReservationService.database;
 
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
+@Entity
+@IdClass(EmployeeAvailabilityPrimaryKey.class)
 public class EmployeeAvailability {
 
 
   private java.sql.Date date;
 
-    @Column(name = "start_time")
+  @Id
+  @Column(name = "start_time")
   private java.sql.Time startTime;
 
-    @Column(name = "end_time")
+  @Id
+  @Column(name = "end_time")
   private java.sql.Time endTime;
 
-    @Column(name = "employee_id")
+  @Id
+  @Column(name = "employee_id")
   private long employeeId;
 
 

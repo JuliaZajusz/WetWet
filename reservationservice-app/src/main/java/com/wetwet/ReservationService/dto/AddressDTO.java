@@ -15,6 +15,16 @@ public class AddressDTO {
         this.houseAppartmentNumber = addressPoint.getHouseAppartmentNumber();
     }
 
+    public AddressDTO() {
+    }
+
+    public AddressDTO(Long id, String houseAppartmentNumber, Street street, City city) {
+        this.id = id;
+        this.houseAppartmentNumber = houseAppartmentNumber;
+        this.street = street;
+        this.city = city;
+    }
+
     public Long getId() {
         return id;
     }

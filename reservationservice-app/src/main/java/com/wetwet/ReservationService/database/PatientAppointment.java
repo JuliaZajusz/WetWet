@@ -15,6 +15,14 @@ public class PatientAppointment {
   @Column(name = "appointment_id")
   private long appointmentId;
 
+    public PatientAppointment(long patientId, long appointmentId) {
+        this.patientId = patientId;
+        this.appointmentId = appointmentId;
+    }
+
+    public PatientAppointment() {
+    }
+
 
   public long getPatientId() {
     return patientId;

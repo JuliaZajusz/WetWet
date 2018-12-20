@@ -1,5 +1,7 @@
 package com.wetwet.ReservationService.database;
 
+import com.wetwet.ReservationService.dto.AppointmentWithPatientAndAddress;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
@@ -33,7 +35,7 @@ public class Appointment {
     @Column(name = "consulting_room_id")
     private Long consultingRoomId;
 
-    public Appointment(Long id, String title, String description, long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {
+    public Appointment(Long id, String title, String description, Long cost, Date date, Time startTime, Time endTime, Long addressPointId, Long consultingRoomId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -46,6 +48,17 @@ public class Appointment {
     }
 
     public Appointment() {
+    }
+
+    public Appointment(AppointmentWithPatientAndAddress appointmentWithPatientAndAddress) {
+        this.title = appointmentWithPatientAndAddress.title;
+        this.description = appointmentWithPatientAndAddress.description;
+        this.cost = appointmentWithPatientAndAddress.cost;
+        this.date = appointmentWithPatientAndAddress.date;
+        this.startTime = appointmentWithPatientAndAddress.startTime;
+        this.endTime = appointmentWithPatientAndAddress.endTime;
+        this.addressPointId = appointmentWithPatientAndAddress.addressDTO.getId();
+        this.consultingRoomId = appointmentWithPatientAndAddress.consultingRoomId;
     }
 
     public Long getId() {
@@ -64,7 +77,7 @@ public class Appointment {
         this.description = description;
     }
 
-    public long getCost() {
+    public Long getCost() {
         return cost;
     }
 
@@ -92,7 +105,7 @@ public class Appointment {
         this.title = title;
     }
 
-    public void setCost(long cost) {
+    public void setCost(Long cost) {
         this.cost = cost;
     }
 

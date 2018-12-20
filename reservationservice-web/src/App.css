@@ -6,6 +6,10 @@
     margin: 16px;
 }
 
+.margin-top-md {
+    margin-top: 16px;
+}
+
 .ml-lg {
     margin-left: 16px;
 }
@@ -34,5 +38,16 @@
     font-size: 14px;
     line-height: 1.5;
     color: black;
-    font-weight: 600;
+    font-weight: 700;
+}
+
+.card-value {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.custom-select {
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }

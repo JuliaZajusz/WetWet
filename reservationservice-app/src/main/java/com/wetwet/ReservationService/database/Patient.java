@@ -11,8 +11,10 @@ import java.io.Serializable;
 
 public class Patient implements Serializable{
 
-    @Column(name = "ID")
-  private @Id @GeneratedValue long id;
+  @Id
+  @GeneratedValue
+  @Column(name = "ID")
+  private Long id;
 
   private String name;
 
@@ -26,13 +28,13 @@ public class Patient implements Serializable{
     private String specialCharacters;
 
     @Column(name = "breed_id")
-    private long breedId;
+    private Long breedId;
 
   public Patient(){
 
   }
 
-  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, long breedId) {
+  public Patient(String name, String sex, String birthdate, String coat, String specialCharacters, Long breedId) {
     this.name = name;
     this.sex = sex;
     this.birthdate = birthdate;
@@ -41,11 +43,11 @@ public class Patient implements Serializable{
     this.breedId = breedId;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -94,11 +96,11 @@ public class Patient implements Serializable{
     this.specialCharacters = specialCharacters;
   }
 
-  public long getBreedId() {
+  public Long getBreedId() {
     return breedId;
   }
 
-  public void setBreedId(long breedId) {
+  public void setBreedId(Long breedId) {
     this.breedId = breedId;
   }
 }

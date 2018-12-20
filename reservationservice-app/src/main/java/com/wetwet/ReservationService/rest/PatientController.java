@@ -20,9 +20,17 @@ public class PatientController {
     List<PatientDTO> getAllPatients(){
         return patientService.getPatients();
     }
+
+    @GetMapping(path = "/all/{id}")
+    public @ResponseBody
+    List<PatientDTO> getPatronAllPatients(@PathVariable Long id) {
+        return patientService.getPatronAllPatients(id);
+    }
+
     @GetMapping(path ="/{id}")
     public @ResponseBody
     PatientDTO getPatientById(@PathVariable Long id){
         return patientService.getPatientById(id);
     }
+
 }

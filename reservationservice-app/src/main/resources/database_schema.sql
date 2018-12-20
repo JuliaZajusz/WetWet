@@ -24,16 +24,16 @@ CREATE TABLE Employee_Appointment (
 	PRIMARY KEY (Appointment_ID, Employee_ID));
 
 CREATE TABLE Appointment (
-  ID                 int(10) NOT NULL AUTO_INCREMENT,
-  Title              varchar(255) NOT NULL,
-  Description        text,
-	Cost               int(10) NOT NULL,
-  Date               date NOT NULL,
-  Start_Time         time NOT NULL,
-  End_Time           time NOT NULL,
-  Address_Point_ID   int(10),
-  Consulting_Room_ID int(10),
-  DrugCost           int(10),
+	ID                 int(10) NOT NULL AUTO_INCREMENT,
+	Title              varchar(255) NOT NULL,
+	Description        text,
+	Cost               int(10),
+	Date               date NOT NULL,
+	Start_Time         time NOT NULL,
+	End_Time           time NOT NULL,
+	Address_Point_ID   int(10),
+	Consulting_Room_ID int(10),
+	DrugCost           int(10),
   PRIMARY KEY (ID));
 
 CREATE TABLE Consulting_Room (

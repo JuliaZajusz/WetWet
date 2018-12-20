@@ -51,4 +51,9 @@ public class PatientService {
                 .filter(patient -> patientsIds.contains(patient.getId()))
                 .collect(Collectors.toList());
     }
+
+    public List<PatientDTO> getPatronAllPatients(Long id) {
+        return getPatientsByPatronId(id).stream()
+                .map(patient -> new PatientDTO(patient, breedService.getBreedDTOById(patient.getBreedId()))).collect(Collectors.toList());
+    }
 }
