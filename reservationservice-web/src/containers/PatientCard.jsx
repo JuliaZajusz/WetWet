@@ -12,12 +12,15 @@ class PatientCard extends Component {
   };
 
   componentWillMount = () => {
+    this.reloadAppointments();
+  }
+
+  reloadAppointments = () => {
     if (this.props.history.location.pathname !== '/patient/new') {
       let path = this.props.history.location.pathname.split('/')
       getPatient(path[2]).then((res) => this.setState({ patient: res }))
       getPatientAppointments(path[2]).then((res) => this.setState({ patientAppointments: res }))
     }
-
   }
 
   render() {
@@ -64,7 +67,8 @@ class PatientCard extends Component {
 
           {/*</div>*/}
           {/*})}*/}
-          <AppointmentList data={this.state.patientAppointments}/>
+          <AppointmentList onReloadAppointments={() => this.reloadAppointments()}
+                           data={this.state.patientAppointments}/>
         </div>
         }
 

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PatientAppointmentRepository extends JpaRepository<PatientAppointment, Long> {
 
-    @Query("SELECT r FROM PatientAppointment r WHERE Patient_ID =?1")
+    @Query("SELECT r FROM PatientAppointment r WHERE patient_id =?1")
     List<PatientAppointment> findAllByPatientId(Long patientId);
 }

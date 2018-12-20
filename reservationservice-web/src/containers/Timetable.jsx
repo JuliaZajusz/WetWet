@@ -7,11 +7,12 @@ import { Modal } from 'antd';
 import WrappedAppointmentForm from './AppointmentForm';
 import { getConsultingRooms } from '../clients/ConsultingRoomClient'
 import AppointmentCard from './AppointmentCard'
+import { getEmployeesList } from '../clients/EmployeesClient'
 
 
 class Timetable extends Component {
   allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
-  state = { events: [], consultingRooms: [], slotInfo: { action: null }, appointmentId: null }
+  state = { events: [], consultingRooms: [], slotInfo: { action: null }, appointmentId: null, employees: [] }
 
   getRandomColor = () => {
     let letters = '0123456789ABCDEF';
@@ -28,6 +29,7 @@ class Timetable extends Component {
       BigCalendar.momentLocalizer(moment),
     );
     this.loadAppointments()
+    getEmployeesList().then((res) => this.setState({ employees: res }))
   }
 
   loadAppointments() {
@@ -78,6 +80,7 @@ class Timetable extends Component {
     handleOk = (e) => {
         this.setState({
             visible: false,
+          appointmentId: null,
           edit: false,
         });
       this.loadAppointments()
@@ -86,6 +89,7 @@ class Timetable extends Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+          appointmentId: null,
           edit: false,
         });
     }
@@ -145,6 +149,7 @@ class Timetable extends Component {
           >
             <AppointmentCard
               edit={this.state.edit}
+              employees={this.state.employees}
               appointment={this.state.appointments[this.state.appointmentId]}
               slotInfo={this.state.slotInfo}
               onOk={this.handleOk}

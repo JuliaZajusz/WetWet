@@ -43,6 +43,13 @@ public class AppointmentService {
     public Appointment createAppointment(AppointmentWithPatientAndAddress appointmentWithPatientAndAddress) {
         Appointment appointment = new Appointment(appointmentWithPatientAndAddress);
         appointment = appointmentRepository.save(appointment);
+        Long appointmentId = appointmentWithPatientAndAddress.id;
+        PatientAppointment oldPatientAppointment = patientAppointmentRepository.findById(appointmentId).orElse(null);
+        if (oldPatientAppointment != null &&
+                appointmentWithPatientAndAddress.id != null &&
+                appointmentWithPatientAndAddress.patientId != oldPatientAppointment.getPatientId()) {
+            patientAppointmentRepository.delete(oldPatientAppointment);
+        }
         Patient patient = patientRepository.findById(appointmentWithPatientAndAddress.patientId).get();
         if (patient != null) {
             PatientAppointment patientAppointment;
@@ -54,12 +61,15 @@ public class AppointmentService {
 
 
     public void deleteAppointment(Long id) {
+        patientAppointmentRepository.deleteById(id);
         appointmentRepository.deleteById(id);
     }
 
     public List<Appointment> getPatientAppointments(Long patientId) {
-        return patientAppointmentRepository.findAllByPatientId(patientId)
+        List<PatientAppointment> patientAppointments = patientAppointmentRepository.findAllByPatientId(patientId);
+        List<Appointment> appointments = patientAppointments
                 .stream()
                 .map(patientAppointment -> appointmentRepository.findById(patientAppointment.getAppointmentId()).get()).collect(Collectors.toList());
+        return appointments;
     }
 }

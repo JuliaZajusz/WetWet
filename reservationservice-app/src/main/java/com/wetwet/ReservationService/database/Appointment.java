@@ -51,6 +51,7 @@ public class Appointment {
     }
 
     public Appointment(AppointmentWithPatientAndAddress appointmentWithPatientAndAddress) {
+        this.id = appointmentWithPatientAndAddress.id;
         this.title = appointmentWithPatientAndAddress.title;
         this.description = appointmentWithPatientAndAddress.description;
         this.cost = appointmentWithPatientAndAddress.cost;

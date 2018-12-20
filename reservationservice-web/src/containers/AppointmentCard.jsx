@@ -17,11 +17,13 @@ class AppointmentCard extends Component {
 
   format = 'HH:mm';
 
+
   render() {
     return (
       <div>
         {this.props.edit ?
           <WrappedAppointmentForm
+            employees={this.props.employees}
             appointment={this.props.appointment}
             consultingRooms={this.props.consultingRooms}
             slotInfo={this.props.slotInfo}

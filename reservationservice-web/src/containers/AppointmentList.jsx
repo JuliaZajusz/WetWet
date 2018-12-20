@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
+import { Modal, Table } from 'antd';
+import AppointmentCard from './AppointmentCard'
+import { deleteAppointment } from '../clients/AppointmentClient'
 
 
 class AppointmentList extends Component {
-  //
-  // constructor() {
-  //     super();
-  //     this.state = {
-  //         data : []
-  //     }
-  // }
+
+  constructor(props) {
+    super();
+    this.state = {
+      consultingRooms: [],
+      appointment: null,
+      employees: [],
+      appointments: props.data,
+      visible: false,
+      edit: false,
+    }
+
+  }
   // componentWillMount(){
   //     getPatients().then(res => this.setState({data: res}))
   // }
@@ -35,6 +43,28 @@ class AppointmentList extends Component {
     },
   ];
 
+  handleOk = (e) => {
+    this.setState({
+      visible: false,
+      edit: false,
+    });
+    this.props.onReloadAppointments()
+  }
+
+  handleCancel = (e) => {
+    this.setState({
+      visible: false,
+      edit: false,
+    });
+  }
+
+  handleDelete = () => {
+    deleteAppointment(this.state.appointments[this.state.appointmentId].id)
+      .then(() => {
+        this.handleOk();
+      })
+  }
+
 
   render() {
     const data = this.props.data;
@@ -45,8 +75,30 @@ class AppointmentList extends Component {
                columns={this.columns}
                rowKey='id'
                size="medium"
-          // onRowClick={(patron) => history.push('/patient/' + patron.id)}
+               onRowClick={(appointment) => {
+                 console.log(appointment)
+                 this.setState({ appointment: appointment, visible: true })
+               }}
         />
+        {this.state.appointment && <Modal
+          title="Wizyta"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[]}
+        >
+          <AppointmentCard
+            edit={this.state.edit}
+            employees={this.state.employees}
+            appointment={this.state.appointment}
+            slotInfo={null}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            onDelete={this.handleDelete}
+            consultingRooms={this.state.consultingRooms}
+            onEnableEdit={() => this.setState({ edit: true })}
+          />
+        </Modal>}
       </div>
     )
   }

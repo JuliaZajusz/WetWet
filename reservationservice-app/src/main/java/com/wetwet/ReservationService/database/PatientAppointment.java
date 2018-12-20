@@ -8,14 +8,14 @@ import javax.persistence.Id;
 @Entity
 public class PatientAppointment {
 
-  @Id
   @Column(name = "patient_id")
-  private long patientId;
+  private Long patientId;
 
+  @Id
   @Column(name = "appointment_id")
-  private long appointmentId;
+  private Long appointmentId;
 
-    public PatientAppointment(long patientId, long appointmentId) {
+  public PatientAppointment(Long patientId, Long appointmentId) {
         this.patientId = patientId;
         this.appointmentId = appointmentId;
     }
@@ -24,20 +24,20 @@ public class PatientAppointment {
     }
 
 
-  public long getPatientId() {
+  public Long getPatientId() {
     return patientId;
   }
 
-  public void setPatientId(long patientId) {
+  public void setPatientId(Long patientId) {
     this.patientId = patientId;
   }
 
 
-  public long getAppointmentId() {
+  public Long getAppointmentId() {
     return appointmentId;
   }
 
-  public void setAppointmentId(long appointmentId) {
+  public void setAppointmentId(Long appointmentId) {
     this.appointmentId = appointmentId;
   }
 
