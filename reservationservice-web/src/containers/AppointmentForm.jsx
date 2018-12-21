@@ -59,11 +59,9 @@ class AppointmentForm extends Component {
       }
       saveAppointments(appointment)
         .then(() => {
-          // this.setState({selectedPatronId: ''})
           this.setState({ selectedPatron: null })
             this.props.onOk()
           this.props.form.resetFields();
-          console.log('resetFields')
           },
         )
     });

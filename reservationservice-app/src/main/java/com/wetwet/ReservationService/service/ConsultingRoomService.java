@@ -21,4 +21,8 @@ public class ConsultingRoomService {
     public List<ConsultingRoom> getConsultingRooms() {
         return repository.findAll();
     }
+
+    public ConsultingRoom getConsultingRoomById(Long id) {
+        return repository.findById(id).orElseGet(null);
+    }
 }

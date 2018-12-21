@@ -26,4 +26,9 @@ class ConsultingRoomController {
         return consultingRoomService.getConsultingRooms();
     }
 
+    @GetMapping(path = "/{id}")
+    @ResponseBody
+    public ConsultingRoom getInaccesability(@PathVariable Long id) {
+        return consultingRoomService.getConsultingRoomById(id);
+    }
 }

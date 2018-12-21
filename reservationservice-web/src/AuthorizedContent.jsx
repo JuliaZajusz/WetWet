@@ -11,6 +11,8 @@ import PatronCard from './containers/PatronCard'
 import SignUp from './containers/SignUp'
 import { getPositionFromToken, signOut } from './clients/AuthorizationClient'
 import PatientCard from './containers/PatientCard'
+import ConsultingRoomInaccessibilityList from './containers/ConsultingRoomInaccessibilityList'
+import ConsultingRoomInaccessibilityForm from './containers/ConsultingRoomInaccessibilityForm'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -59,6 +61,10 @@ class AuthorizedContent extends Component {
                   <Icon type="calendar"/>
                   <span>Terminarz</span>
                 </Menu.Item>
+                <Menu.Item key="/consultingRoomInaccessibility">
+                  <Icon type="table"/>
+                  <span>Niedostępność gabinetów</span>
+                </Menu.Item>
                 {this.state.role !== 'NONE' &&
                 <Menu.Item key="/users">
                   <Icon type="team"/>
@@ -79,9 +85,11 @@ class AuthorizedContent extends Component {
                 <Route exact path='/users' component={EmployeesList}/>
                 <Route exact path='/patients' component={PatientsList}/>
                 <Route path='/timetable' component={Timetable}/>
+                <Route exact path='/consultingRoomInaccessibility' component={ConsultingRoomInaccessibilityList}/>
                 <Route exact path='/patrons' component={PatronsList}/>
-                <Route exact path='/patron/:id' component={PatronCard}/>
-                <Route exact path='/patient/:id' component={PatientCard}/>
+                <Route path='/patron/:id' component={PatronCard}/>
+                <Route path='/patient/:id' component={PatientCard}/>
+                <Route exact path='/consultingRoomInaccessibility/:id' component={ConsultingRoomInaccessibilityForm}/>
                 <Route exact path='/users/add' component={SignUp}/>
               </Switch>
             </Layout>
