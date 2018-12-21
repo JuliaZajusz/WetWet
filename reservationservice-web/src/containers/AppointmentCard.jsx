@@ -19,10 +19,12 @@ class AppointmentCard extends Component {
 
 
   render() {
+    let consultingRoom = this.props.consultingRooms.find((cr) => cr.id === this.props.appointment.consultingRoomId)
     return (
       <div>
         {this.props.edit ?
           <WrappedAppointmentForm
+            patron={this.props.patron}
             employees={this.props.employees}
             appointment={this.props.appointment}
             consultingRooms={this.props.consultingRooms}
@@ -32,12 +34,25 @@ class AppointmentCard extends Component {
           :
           <div>
             <Row className={'row'}>
-              <Col xs={'12'} sm={'4'} className={'card-label'}>Pacjent</Col>
-              <Col xs={'12'} sm={'8'}>TODO</Col>
+              <Col xs={'12'} sm={'4'} className={'card-label'}>Opiekun</Col>
+              <Col xs={'12'} sm={'8'}>{
+                this.props.patron &&
+                this.props.patron.firstName + ' ' + this.props.patron.lastName
+              }</Col>
             </Row>
             <Row className={'row'}>
-              <Col xs={'12'} sm={'4'} className={'card-label'}>Opiekun</Col>
-              <Col xs={'12'} sm={'8'}>TODO</Col>
+              <Col xs={'12'} sm={'4'} className={'card-label'}>Pacjent</Col>
+              <Col xs={'12'} sm={'8'}>{
+                this.props.patient &&
+                this.props.patient.name + ' - ' + this.props.patient.breed.name + ' (' + this.props.patient.breed.species + ')'
+              }</Col>
+            </Row>
+            <Row className={'row'}>
+              <Col xs={'12'} sm={'4'} className={'card-label'}>Pracownik</Col>
+              <Col xs={'12'} sm={'8'}>{
+                this.props.employee &&
+                this.props.employee.firstName + ' ' + this.props.employee.lastName
+              }</Col>
             </Row>
             <Row className={'row'}>
               <Col xs={'12'} sm={'4'} className={'card-label'}>Tytuł</Col>
@@ -65,7 +80,8 @@ class AppointmentCard extends Component {
             {/*</Row>*/}
             <Row className={'row'}>
               <Col xs={'12'} sm={'4'} className={'card-label'}>Gabinet</Col>
-              <Col xs={'12'} sm={'8'}>{this.props.appointment.consultingRoomId}</Col>
+              <Col xs={'12'}
+                   sm={'8'}>{consultingRoom && consultingRoom.roomNumber + ' ' + consultingRoom.description}</Col>
             </Row>
 
             <div className={'button-container'}>

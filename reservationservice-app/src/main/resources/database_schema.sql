@@ -68,6 +68,11 @@ CREATE TABLE Patient_Appointment (
 	Appointment_ID			int(10) NOT NULL,
     PRIMARY KEY (Patient_ID, Appointment_ID));
 
+CREATE TABLE Patron_Appointment (
+	Patron_ID				int(10) NOT NULL,
+	Appointment_ID			int(10) NOT NULL,
+	PRIMARY KEY (Appointment_ID));
+
 CREATE TABLE Patient (
 	ID						int(10) NOT NULL AUTO_INCREMENT,
 	Name					varchar(255),
@@ -139,6 +144,8 @@ ALTER TABLE Address_Point ADD CONSTRAINT FKStreetInAddress_Point FOREIGN KEY (St
 ALTER TABLE Address_Point ADD CONSTRAINT ExclusiveStreet CHECK ((Street_ID is null xor City_ID is null));
 ALTER TABLE Patient_Appointment ADD CONSTRAINT FKPatientInPatient_Appointment FOREIGN KEY (Patient_ID) REFERENCES Patient (ID);
 ALTER TABLE Patient_Appointment ADD CONSTRAINT FKAppointmentInPatient_Appointment FOREIGN KEY (Appointment_ID) REFERENCES Appointment (ID);
+ALTER TABLE Patron_Appointment ADD CONSTRAINT FKPatronInPatron_Appointment FOREIGN KEY (Patron_ID) REFERENCES Patron (ID);
+ALTER TABLE Patron_Appointment ADD CONSTRAINT FKAppointmentInPatron_Appointment FOREIGN KEY (Appointment_ID) REFERENCES Appointment (ID);
 ALTER TABLE Appointment ADD CONSTRAINT FKAddress_PointInAppointment FOREIGN KEY (Address_Point_ID) REFERENCES Address_Point (ID);
 ALTER TABLE Appointment ADD CONSTRAINT FKConsulting_RoomInAppointment FOREIGN KEY (Consulting_Room_ID) REFERENCES Consulting_Room (ID);
 ALTER TABLE Appointment ADD CONSTRAINT ExclusiveLocation CHECK (Address_Point_ID IS NULL XOR Consulting_Room_ID IS NULL);

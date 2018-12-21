@@ -19,8 +19,9 @@ class AppointmentForm extends Component {
       consultingRooms: [],
       patients: [],
       patrons: [],
-      selectedPatronId: '',
+      selectedPatron: props.patron,
     }
+    props.patron && getPatronPets(props.patron.id).then((res) => this.setState({ patients: res }))
   }
 
   componentWillMount() {
@@ -38,6 +39,8 @@ class AppointmentForm extends Component {
       }
       let appointment = {
         'id': _.get(this.props, 'appointment.id'),
+        'employeeId': fieldsValue.employeeId,
+        'patronId': this.state.selectedPatron.id,
         'patientId': fieldsValue.patientId,
         'title': fieldsValue.title,
         'description': fieldsValue.description,
@@ -56,7 +59,11 @@ class AppointmentForm extends Component {
       }
       saveAppointments(appointment)
         .then(() => {
+          // this.setState({selectedPatronId: ''})
+          this.setState({ selectedPatron: null })
             this.props.onOk()
+          this.props.form.resetFields();
+          console.log('resetFields')
           },
         )
     });
@@ -82,16 +89,16 @@ class AppointmentForm extends Component {
             <ReactSelect
               // className={"custom-select"}
               name="form-field-name"
-              value={this.state.patronName}
+              value={{
+                value: this.state.selectedPatron,
+                label: this.state.selectedPatron ? this.state.selectedPatron.lastName + ' ' + this.state.selectedPatron.firstName : null,
+              }
+              }
               onChange={this.selectPatron}
               options={
-                //   [
-                //   { value: 'one', label: 'One' },
-                //   { value: 'two', label: 'Two' },
-                // ]
                 this.state.patrons.map((patron) => {
                   return {
-                    value: patron.id,
+                    value: patron,
                     label: patron.lastName + ' ' + patron.firstName,
                   }
                 })
@@ -102,6 +109,7 @@ class AppointmentForm extends Component {
 
 
         <Form onSubmit={this.handleSubmit}>
+
           <FormItem
             {...formItemLayout}
             label={'Pacjent'}>
@@ -116,6 +124,22 @@ class AppointmentForm extends Component {
                 }
               </Select>)}
           </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={'Pracownik'}>
+            {getFieldDecorator('employeeId', {
+              initialValue: this.props.appointment ? this.props.appointment.employeeId : null,
+            })(
+              <Select>
+                {this.props.employees.map((p) =>
+                  <Option value={p.id} key={p.id}>
+                    {p.firstName + ' ' + p.lastName}
+                  </Option>)
+                }
+              </Select>)}
+          </FormItem>
+
           <FormItem
             {...formItemLayout}
             label="Tytuł"
@@ -227,6 +251,7 @@ class AppointmentForm extends Component {
           >
             <div className={'button-container'}>
               <Button type="secondary" onClick={() => {
+                this.setState({ selectedPatron: null })
                 this.props.onCancel()
               }}>Anuluj</Button>
               <Button type="primary" htmlType="submit">Zapisz</Button>
@@ -237,10 +262,10 @@ class AppointmentForm extends Component {
     );
   }
 
-  selectPatron = (id) => {
-    console.log(id)
-    this.setState({ selectedPatronId: id.value })
-    getPatronPets(id.value).then((res) => this.setState({ patients: res }))
+  selectPatron = (patron) => {
+    console.log(patron)
+    this.setState({ selectedPatron: patron.value })
+    getPatronPets(patron.value.id).then((res) => this.setState({ patients: res }))
   }
 }
 

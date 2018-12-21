@@ -8,11 +8,16 @@ import WrappedAppointmentForm from './AppointmentForm';
 import { getConsultingRooms } from '../clients/ConsultingRoomClient'
 import AppointmentCard from './AppointmentCard'
 import { getEmployeesList } from '../clients/EmployeesClient'
+import { getPatient } from '../clients/PatientClient'
+import { getPatron } from '../clients/PatronClient'
 
 
 class Timetable extends Component {
   allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
-  state = { events: [], consultingRooms: [], slotInfo: { action: null }, appointmentId: null, employees: [] }
+  state = {
+    events: [], consultingRooms: [], slotInfo: { action: null },
+    appointmentId: null, employees: [], patient: null, patron: null,
+  }
 
   getRandomColor = () => {
     let letters = '0123456789ABCDEF';
@@ -69,8 +74,17 @@ class Timetable extends Component {
   }
 
   showModal = (slotInfo) => {
+    let appointmentExist = this.getAppointment(slotInfo)
+    if (appointmentExist) {
+      getPatient(this.state.appointments[appointmentExist].patientId).then((res) =>
+        this.setState({ patient: res }),
+      )
+      getPatron(this.state.appointments[appointmentExist].patronId).then((res) =>
+        this.setState({ patron: res }),
+      )
+    }
         this.setState({
-          appointmentId: this.getAppointment(slotInfo),
+          appointmentId: appointmentExist,
             visible: true,
             slotInfo: slotInfo,
         });
@@ -81,6 +95,8 @@ class Timetable extends Component {
         this.setState({
             visible: false,
           appointmentId: null,
+          patient: null,
+          patron: null,
           edit: false,
         });
       this.loadAppointments()
@@ -90,6 +106,8 @@ class Timetable extends Component {
         this.setState({
             visible: false,
           appointmentId: null,
+          patient: null,
+          patron: null,
           edit: false,
         });
     }
@@ -151,6 +169,9 @@ class Timetable extends Component {
               edit={this.state.edit}
               employees={this.state.employees}
               appointment={this.state.appointments[this.state.appointmentId]}
+              patient={this.state.patient}
+              patron={this.state.patron}
+              employee={this.state.employees.find((emp) => emp.id === this.state.appointments[this.state.appointmentId].employeeId)}
               slotInfo={this.state.slotInfo}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
@@ -168,6 +189,7 @@ class Timetable extends Component {
             footer={[]}
           >
             <WrappedAppointmentForm
+              employees={this.state.employees}
               consultingRooms={this.state.consultingRooms}
               slotInfo={this.state.slotInfo}
               onOk={this.handleOk}

@@ -27,13 +27,18 @@ class AppointmentController {
         appointmentService.deleteAppointment(id);
     }
 
+    @GetMapping("/{id}")
+    AppointmentWithPatientAndAddress getAppointment(@PathVariable Long id) {
+        return appointmentService.getAppointment(id);
+    }
+
     @GetMapping("/all")
-    List<Appointment> getAppointments() {
+    List<AppointmentWithPatientAndAddress> getAppointments() {
         return appointmentService.getAppointments();
     }
 
     @GetMapping("/all/{patientId}")
-    List<Appointment> getPatientAppointments(@PathVariable Long patientId) {
+    List<AppointmentWithPatientAndAddress> getPatientAppointments(@PathVariable Long patientId) {
         return appointmentService.getPatientAppointments(patientId);
     }
 

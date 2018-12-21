@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Modal, Table } from 'antd';
 import AppointmentCard from './AppointmentCard'
-import { deleteAppointment } from '../clients/AppointmentClient'
+import { deleteAppointment, getAppointment } from '../clients/AppointmentClient'
+import { getPatient } from '../clients/PatientClient'
+import { getPatron } from '../clients/PatronClient'
+import { getConsultingRooms } from '../clients/ConsultingRoomClient'
+import { getEmployee, getEmployeesList } from '../clients/EmployeesClient'
 
 
 class AppointmentList extends Component {
@@ -15,6 +19,9 @@ class AppointmentList extends Component {
       appointments: props.data,
       visible: false,
       edit: false,
+      patient: null,
+      patron: null,
+      employee: null
     }
 
   }
@@ -43,9 +50,33 @@ class AppointmentList extends Component {
     },
   ];
 
+  showModal = (appointment) => {
+    console.log(appointment);
+    // let appointment;
+    //   getAppointment(this.state.appointments[rowId].id).then((res)=>
+    //   appointment = res
+    //   )
+      getPatient(appointment.patientId).then((res) =>
+        this.setState({patient: res})
+      )
+      getPatron(appointment.patronId).then((res) =>
+        this.setState({patron: res})
+      )
+    getEmployee(appointment.employeeId).then((res) =>
+      this.setState({employee: res})
+    )
+    // console.log(appointment)
+    this.setState({ appointment: appointment, visible: true })
+    getConsultingRooms().then((res) => this.setState({ consultingRooms: res }))
+    getEmployeesList().then((res) => this.setState({ employees: res }))
+  }
+
   handleOk = (e) => {
     this.setState({
       visible: false,
+      appointment: null,
+      patient: null,
+      patron: null,
       edit: false,
     });
     this.props.onReloadAppointments()
@@ -54,12 +85,30 @@ class AppointmentList extends Component {
   handleCancel = (e) => {
     this.setState({
       visible: false,
+      appointment: null,
+      patient: null,
+      patron: null,
       edit: false,
     });
   }
 
+  // handleOk = (e) => {
+  //   this.setState({
+  //     visible: false,
+  //     edit: false,
+  //   });
+  //   this.props.onReloadAppointments()
+  // }
+  //
+  // handleCancel = (e) => {
+  //   this.setState({
+  //     visible: false,
+  //     edit: false,
+  //   });
+  // }
+
   handleDelete = () => {
-    deleteAppointment(this.state.appointments[this.state.appointmentId].id)
+    deleteAppointment(this.state.appointment.id)
       .then(() => {
         this.handleOk();
       })
@@ -76,8 +125,9 @@ class AppointmentList extends Component {
                rowKey='id'
                size="medium"
                onRowClick={(appointment) => {
-                 console.log(appointment)
-                 this.setState({ appointment: appointment, visible: true })
+                 this.showModal(appointment)
+                 // console.log(appointment)
+                 // this.setState({ appointment: appointment, visible: true })
                }}
         />
         {this.state.appointment && <Modal
@@ -91,6 +141,9 @@ class AppointmentList extends Component {
             edit={this.state.edit}
             employees={this.state.employees}
             appointment={this.state.appointment}
+            patient={this.state.patient}
+            patron={this.state.patron}
+            employee={this.state.employee}
             slotInfo={null}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
