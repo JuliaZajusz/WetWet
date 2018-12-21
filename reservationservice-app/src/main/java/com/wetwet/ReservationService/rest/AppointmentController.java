@@ -1,6 +1,7 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.Appointment;
+import com.wetwet.ReservationService.dto.AppointmentWithPatientAndAddress;
 import com.wetwet.ReservationService.service.AppointmentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,8 @@ class AppointmentController {
     }
 
     @PostMapping()
-    Appointment addAppointment(@Valid @RequestBody Appointment appointment) {
-        return appointmentService.createAppointments(appointment);
+    Appointment addAppointment(@Valid @RequestBody AppointmentWithPatientAndAddress appointment) {
+        return appointmentService.createAppointment(appointment);
     }
 
     @DeleteMapping("/{id}")
@@ -26,9 +27,19 @@ class AppointmentController {
         appointmentService.deleteAppointment(id);
     }
 
+    @GetMapping("/{id}")
+    AppointmentWithPatientAndAddress getAppointment(@PathVariable Long id) {
+        return appointmentService.getAppointment(id);
+    }
+
     @GetMapping("/all")
-    List<Appointment> getAppointments() {
+    List<AppointmentWithPatientAndAddress> getAppointments() {
         return appointmentService.getAppointments();
+    }
+
+    @GetMapping("/all/{patientId}")
+    List<AppointmentWithPatientAndAddress> getPatientAppointments(@PathVariable Long patientId) {
+        return appointmentService.getPatientAppointments(patientId);
     }
 
 }

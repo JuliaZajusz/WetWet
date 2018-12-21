@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import { getPatients } from "../clients/PatientClient";
+import { getPatients } from '../clients/PatientClient';
+import history from '../history'
 
 
 class PatientsList extends Component {
@@ -39,6 +40,7 @@ class PatientsList extends Component {
                        columns={this.columns}
                        rowKey='id'
                        size="medium"
+                       onRowClick={(patron) => history.push('/patient/' + patron.id)}
                 />
             </div>
         )

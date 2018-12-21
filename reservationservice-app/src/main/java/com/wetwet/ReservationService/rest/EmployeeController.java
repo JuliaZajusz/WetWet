@@ -1,10 +1,9 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.dto.PatientDTO;
 import com.wetwet.ReservationService.service.EmployeeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,11 @@ public class EmployeeController {
 //    @PreAuthorize("hasAuthority('NONE')")
     public List<Employee> getAllEmployees() {
         return employeeService.getEmployees();
+    }
+
+    @GetMapping(path ="/{id}")
+    public @ResponseBody
+    Employee getEmployeeById(@PathVariable Long id){
+        return employeeService.getEmployeeById(id);
     }
 }

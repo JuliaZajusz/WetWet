@@ -10,6 +10,7 @@ import PatronsList from './containers/PatronsList'
 import PatronCard from './containers/PatronCard'
 import SignUp from './containers/SignUp'
 import { getPositionFromToken, signOut } from './clients/AuthorizationClient'
+import PatientCard from './containers/PatientCard'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -80,6 +81,7 @@ class AuthorizedContent extends Component {
                 <Route path='/timetable' component={Timetable}/>
                 <Route exact path='/patrons' component={PatronsList}/>
                 <Route exact path='/patron/:id' component={PatronCard}/>
+                <Route exact path='/patient/:id' component={PatientCard}/>
                 <Route exact path='/users/add' component={SignUp}/>
               </Switch>
             </Layout>

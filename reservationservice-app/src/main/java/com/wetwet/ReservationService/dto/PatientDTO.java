@@ -1,5 +1,7 @@
 package com.wetwet.ReservationService.dto;
 
+import com.wetwet.ReservationService.database.Patient;
+
 public class PatientDTO {
     private long id;
 
@@ -14,6 +16,29 @@ public class PatientDTO {
     private String specialCharacters;
 
     private BreedDTO breed;
+
+    public PatientDTO(long id, String name, String sex, String birthdate, String coat, String specialCharacters, BreedDTO breed) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.birthdate = birthdate;
+        this.coat = coat;
+        this.specialCharacters = specialCharacters;
+        this.breed = breed;
+    }
+
+    public PatientDTO(Patient patient, BreedDTO breed) {
+        this.id = patient.getId();
+        this.name = patient.getName();
+        this.sex = patient.getSex();
+        this.birthdate = patient.getBirthdate();
+        this.coat = patient.getCoat();
+        this.specialCharacters = patient.getSpecialCharacters();
+        this.breed = breed;
+    }
+
+    public PatientDTO() {
+    }
 
     public long getId() {
         return id;

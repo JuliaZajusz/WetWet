@@ -6,30 +6,30 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class PatientAppointment {
+public class PatronAppointment {
 
-  @Column(name = "patient_id")
-  private Long patientId;
+  @Column(name = "patron_id")
+  private Long patronId;
 
   @Id
   @Column(name = "appointment_id")
   private Long appointmentId;
 
-  public PatientAppointment(Long patientId, Long appointmentId) {
-        this.patientId = patientId;
+  public PatronAppointment(Long patronId, Long appointmentId) {
+        this.patronId = patronId;
         this.appointmentId = appointmentId;
     }
 
-    public PatientAppointment() {
+    public PatronAppointment() {
     }
 
 
-  public Long getPatientId() {
-    return patientId;
+  public Long getPatronId() {
+    return patronId;
   }
 
-  public void setPatientId(Long patientId) {
-    this.patientId = patientId;
+  public void setPatronId(Long patronId) {
+    this.patronId = patronId;
   }
 
 

@@ -2,19 +2,29 @@ package com.wetwet.ReservationService.database;
 
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
-//@Entity
+@Entity
 public class EmployeeAppointment {
+
 
 
   @Id
   @Column(name = "appointment_id")
   private long appointmentId;
 
-  @Id
+  //  @Id
   @Column(name = "employee_id")
   private long employeeId;
+
+  public EmployeeAppointment() {
+  }
+
+  public EmployeeAppointment(long employeeId, long appointmentId) {
+    this.appointmentId = appointmentId;
+    this.employeeId = employeeId;
+  }
 
 
   public long getAppointmentId() {
