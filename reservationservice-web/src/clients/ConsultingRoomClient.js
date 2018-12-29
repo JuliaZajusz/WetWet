@@ -1,8 +1,14 @@
 import { client } from './RestClient'
 
-export const getConsultingRooms = async () => {
-  const response = await client.get(`/api/consultingRoom/all`);
-  return response.data
+// export const getConsultingRooms = async () => {
+//   const response = await client.get(`/api/consultingRoom/all`);
+//   return response.data
+// };
+
+export const getConsultingRooms = async (body) => {
+
+    const response = await client.post(`/api/consultingRoom/all`, body);
+    return response.data
 };
 
 export const getConsultingRoom = async (id) => {

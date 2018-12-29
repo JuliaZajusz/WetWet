@@ -7,6 +7,7 @@ import ReactSelect from 'react-select';
 import { Col, Row } from 'react-bootstrap'
 import { getPatrons } from '../clients/PatronClient'
 import { getPatronPets } from '../clients/PatientClient'
+import {getConsultingRooms} from "../clients/ConsultingRoomClient";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -20,12 +21,51 @@ class AppointmentForm extends Component {
       patients: [],
       patrons: [],
       selectedPatron: props.patron,
+        dateTime: {
+        date: props.appointment ? moment(props.appointment.date, 'YYYY-MM-DD') : moment(props.slotInfo.start, 'YYYY-MM-DD'),
+            startTime: props.appointment ? moment(props.appointment.startTime, 'HH:mm') : moment(props.slotInfo.start, 'HH:mm'),
+            endTime : props.appointment ? moment(props.appointment.endTime, 'HH:mm') : moment(props.slotInfo.end, 'HH:mm')
+        }
     }
     props.patron && getPatronPets(props.patron.id).then((res) => this.setState({ patients: res }))
+
+      let body = {
+          date: this.state.dateTime.date.format('YYYY-MM-DD'),
+          startTime:  this.state.dateTime.startTime.format('HH:MM:SS'),
+          endTime: this.state.dateTime.endTime.format('HH:MM:SS')
+      };
+      getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
   }
 
+    loadConsultingRooms = (date, dateString, field )=> {
+        console.log("field: ", field);
+        this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+
+        if(field === "date" ){
+            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+        }
+        else if(field === "startTime" ){
+            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+        }
+        else if(field === "endTime" ){
+            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+        }
+        console.log('data' + date + ' ' + dateString);
+        let body = {
+            date: field === "date" ? dateString : this.state.dateTime.date.format('YYYY-MM-DD'),
+            startTime: field === "startTime" ? dateString+ ":00" : this.state.dateTime.startTime.format('HH:MM:SS'),
+            endTime: field === "endTime" ? dateString+ ":00" :this.state.dateTime.endTime.format('HH:MM:SS')
+        };
+
+        // console.log(this.props.appointment ? moment(this.props.appointment.date, this.dateFormat) : moment(this.props.slotInfo.start, this.dateFormat));
+        // console.log(this.state.dateTime[field]);
+        getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
+    }
+
   componentWillMount() {
-    getPatrons().then((res) => this.setState({ patrons: res }))
+    getPatrons().then((res) => this.setState({ patrons: res }));
+
+
   }
 
   format = 'HH:mm';
@@ -169,8 +209,8 @@ class AppointmentForm extends Component {
               rules: [{
                 required: true, message: 'Pole wymagane',
               }],
-              initialValue: this.props.appointment ? moment(this.props.appointment.date, this.dateFormat) : moment(this.props.slotInfo.start, this.dateFormat),
-            })(<DatePicker
+              initialValue: this.state.dateTime.date
+            })(<DatePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "date")}
               format={this.dateFormat}/>)}
           </FormItem>
 
@@ -183,8 +223,8 @@ class AppointmentForm extends Component {
               rules: [{
                 required: true, message: 'Pole wymagane',
               }],
-              initialValue: this.props.appointment ? moment(this.props.appointment.startTime, this.format) : moment(this.props.slotInfo.start, this.format),
-            })(<TimePicker
+              initialValue: this.state.dateTime.startTime
+            })(<TimePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "startTime")}
               format={this.format}/>)}
           </FormItem>
 
@@ -197,9 +237,10 @@ class AppointmentForm extends Component {
               rules: [{
                 required: true, message: 'Pole wymagane',
               }],
-              initialValue: this.props.appointment ? moment(this.props.appointment.endTime, this.format) : moment(this.props.slotInfo.end, this.format),
+              initialValue: this.state.dateTime.endTime
             })(
-              <TimePicker format={this.format}/>,
+              <TimePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "endTime")}
+                  format={this.format}/>,
             )}
           </FormItem>
           {/*<FormItem*/}
@@ -237,7 +278,7 @@ class AppointmentForm extends Component {
               initialValue: this.props.appointment ? this.props.appointment.consultingRoomId : null,
             })(
               <Select>
-                {this.props.consultingRooms.map((cr) => <Option value={cr.id}
+                {this.state.consultingRooms.map((cr) => <Option value={cr.id}
                                                                 key={cr.id}>{cr.roomNumber + ' ' + cr.description}</Option>)}
               </Select>)}
           </FormItem>
