@@ -44,25 +44,31 @@ public class ConsultingRoomService {
 
     public boolean checkIfWetDateContainsAtLEastOneFromList(WetDate a, List<ConsultingRoomInaccessibility> inaccessibilities) {
         return inaccessibilities.stream().map(inaccessibility -> new WetDate(inaccessibility))
-                .anyMatch(wetDate -> checkIfWetDateContainsAnother(a, wetDate));
+                .anyMatch(wetDate -> checkIfWetDateContainsAnother(wetDate, a));
     }
 
-    public boolean checkIfWetDateContainsAnother(WetDate a, WetDate b) {
-        System.out.println(a.date);
-        System.out.println(b.date);
-        if (!a.date.toString().equals(b.date.toString())) {
-            System.out.println("Inna data");
+    public boolean checkIfWetDateContainsAnother(WetDate inaccessibility, WetDate appointment) {
+        System.out.println(inaccessibility.date + "  " + inaccessibility.startTime + "  " + inaccessibility.endTime);
+        System.out.println(appointment.date + "  " + appointment.startTime + "  " + appointment.endTime);
+        if (inaccessibility.date.toString().equals(appointment.date.toString())) {
+
+            if (inaccessibility.startTime.before(appointment.startTime) && inaccessibility.endTime.after(appointment.startTime)) {
+                System.out.println("Poczatek wizyty wpada w niedostepnosc");
+                return true;
+            }
+            if (inaccessibility.startTime.after(appointment.startTime) && inaccessibility.startTime.before(appointment.endTime)) {
+                System.out.println("Koniec wizyty wpada w niedostepnosc");
+                return true;
+            }
+
+            if (inaccessibility.startTime.before(appointment.startTime) && inaccessibility.endTime.after(appointment.endTime)) {
+                System.out.println("Srodek wizyty wpda w niedostepnosc");
+                return true;
+            }
+            System.out.println("ta sama data ale nie zawiera");
             return false;
         }
-        if (a.startTime.after(b.startTime) && a.startTime.before(b.endTime)) {
-            System.out.println("Wizyta zaczyna się później, ale przed końcem niedostępności");
-            return false;
-        }
-        if (a.endTime.before(b.endTime) && b.startTime.before(a.endTime)) {
-            System.out.println("Wizyta kończy się wcześniej niż niedostępność, ale niedostępność zaczyna się w trakcie wizyty");
-            return false;
-        }
-        System.out.println("ZAWIERA!!!!!!!!!!!!!!!!");
-        return true;
+        System.out.println("Inna data");
+        return false;
     }
 }
