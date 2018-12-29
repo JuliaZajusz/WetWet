@@ -21,14 +21,14 @@ public class ConsultingRoomInaccessibilityController {
     public List<ConsultingRoomInaccessibilityWthConsultingRoom> getAllInaccesabilities() {
         return consultingRoomInaccessibilityService.getInaccessibilities();
     }
-//
-@GetMapping(path = "/{id}")
-@ResponseBody
-public ConsultingRoomInaccessibilityWthConsultingRoom getInaccesability(@PathVariable Long id) {
-    return consultingRoomInaccessibilityService.getInaccessibilityById(id);
-}
 
-    //
+
+    @GetMapping(path = "/{id}")
+    @ResponseBody
+    public ConsultingRoomInaccessibilityWthConsultingRoom getInaccesability(@PathVariable Long id) {
+        return consultingRoomInaccessibilityService.getInaccessibilityById(id);
+    }
+
     @PostMapping()
     public ConsultingRoomInaccessibility createInaccesability(@Valid @RequestBody ConsultingRoomInaccessibility consultingRoomInaccessibility) {
         ConsultingRoomInaccessibility inn = consultingRoomInaccessibilityService.createInaccessibility(consultingRoomInaccessibility);

@@ -1,6 +1,7 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.ConsultingRoom;
+import com.wetwet.ReservationService.database.WetDate;
 import com.wetwet.ReservationService.service.ConsultingRoomService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,12 @@ class ConsultingRoomController {
 
     @GetMapping(path = "/{id}")
     @ResponseBody
-    public ConsultingRoom getInaccesability(@PathVariable Long id) {
+    public ConsultingRoom getConsultingRoom(@PathVariable Long id) {
         return consultingRoomService.getConsultingRoomById(id);
+    }
+
+    @PostMapping("/all")
+    public List<ConsultingRoom> getAllAccessibleConsultingRooms(@Valid @RequestBody WetDate date) {
+        return consultingRoomService.getAllAccessibleConsultingRooms(date);
     }
 }
