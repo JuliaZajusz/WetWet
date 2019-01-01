@@ -4,6 +4,7 @@ import history from '../history'
 import Button from 'antd/es/button/button'
 import { getPatient, getPatientAppointments } from '../clients/PatientClient'
 import AppointmentList from './AppointmentList'
+import PatientForm from './PatientForm'
 
 class PatientCard extends Component {
   state = {
@@ -75,7 +76,7 @@ class PatientCard extends Component {
 
         {(arrayPath[1] === 'patient'
           && arrayPath[3] === 'edit') && <div>
-          <PatronForm data={this.state.patient} onSubmitSuccess={(res) => {
+          <PatientForm data={this.state.patient} onSubmitSuccess={(res) => {
             this.setState({ patient: res });
             history.push('/patient/' + res.id)
           }}/>

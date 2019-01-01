@@ -31,6 +31,15 @@ public class AppointmentService {
     @Autowired
     private EmployeeAppointmentRepository employeeAppointmentRepository;
 
+    public List<Appointment> getAppointmentsByDate(String date) {
+
+        List<Appointment> appointments = appointmentRepository.findAll().stream()
+                .filter(appointment -> appointment.getDate().toString().equals(date)
+                )
+                .collect(Collectors.toList());
+        return appointments;
+    }
+
 
     public List<AppointmentWithPatientAndAddress> getAppointments() {
 

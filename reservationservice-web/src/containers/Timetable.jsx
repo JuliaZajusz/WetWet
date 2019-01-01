@@ -5,7 +5,6 @@ import 'moment/locale/pl'
 import { deleteAppointment, getAppointments } from '../clients/AppointmentClient'
 import { Modal } from 'antd';
 import WrappedAppointmentForm from './AppointmentForm';
-import { getConsultingRooms } from '../clients/ConsultingRoomClient'
 import AppointmentCard from './AppointmentCard'
 import { getEmployeesList } from '../clients/EmployeesClient'
 import { getPatient } from '../clients/PatientClient'
@@ -15,7 +14,8 @@ import { getPatron } from '../clients/PatronClient'
 class Timetable extends Component {
   allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
   state = {
-    events: [], consultingRooms: [], slotInfo: { action: null },
+    events: [],
+      slotInfo: { action: null },
     appointmentId: null, employees: [], patient: null, patron: null,
   }
 
@@ -88,8 +88,13 @@ class Timetable extends Component {
             visible: true,
             slotInfo: slotInfo,
         });
-    getConsultingRooms().then((res) => this.setState({ consultingRooms: res }))
+    this.clickChild()
     }
+
+  clickChild = () => {
+  }
+  clickCancelChild = () => {
+  }
 
     handleOk = (e) => {
         this.setState({
@@ -110,6 +115,7 @@ class Timetable extends Component {
           patron: null,
           edit: false,
         });
+      this.clickCancelChild(e)
     }
 
   handleDelete = () => {
@@ -176,7 +182,6 @@ class Timetable extends Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
               onDelete={this.handleDelete}
-              consultingRooms={this.state.consultingRooms}
               onEnableEdit={() => this.setState({ edit: true })}
             />
           </Modal>
@@ -189,8 +194,9 @@ class Timetable extends Component {
             footer={[]}
           >
             <WrappedAppointmentForm
+              setClick={click => this.clickChild = click}
+              setCancelClick={clickCancel => this.clickCancelChild = clickCancel}
               employees={this.state.employees}
-              consultingRooms={this.state.consultingRooms}
               slotInfo={this.state.slotInfo}
               onOk={this.handleOk}
               onCancel={this.handleCancel}/>

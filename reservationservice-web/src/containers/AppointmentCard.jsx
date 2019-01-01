@@ -2,28 +2,35 @@ import { Button, DatePicker, Form, Select } from 'antd';
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap'
 import WrappedAppointmentForm from './AppointmentForm'
+import { getAllConsultingRooms } from '../clients/ConsultingRoomClient'
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 const { MonthPicker, RangePicker } = DatePicker;
 
 class AppointmentCard extends Component {
-  // constructor(props) {
-  //   super();
-  //   this.state = {
-  //     edit: props.edit,
-  //   }
-  // }
+  constructor(props) {
+    super();
+    this.state = {
+      consultingRooms: [],
+    }
+  }
+
+  componentWillMount = () => {
+    getAllConsultingRooms().then((res) => this.setState({ consultingRooms: res }));
+  }
 
   format = 'HH:mm';
 
 
   render() {
-    let consultingRoom = this.props.consultingRooms.find((cr) => cr.id === this.props.appointment.consultingRoomId)
+    let consultingRoom = this.state.consultingRooms.find((cr) => cr.id === this.props.appointment.consultingRoomId)
     return (
       <div>
         {this.props.edit ?
           <WrappedAppointmentForm
+            setClick={click => this.clickChild = click}
+            setCancelClick={clickCancel => this.clickCancelChild = clickCancel}
             patron={this.props.patron}
             employees={this.props.employees}
             appointment={this.props.appointment}

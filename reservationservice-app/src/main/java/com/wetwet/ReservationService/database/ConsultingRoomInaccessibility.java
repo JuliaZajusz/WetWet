@@ -1,30 +1,47 @@
 package com.wetwet.ReservationService.database;
 
 
+import com.wetwet.ReservationService.dto.ConsultingRoomInaccessibilityWthConsultingRoom;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 
 @Entity
-@IdClass(ConsultingRoomInaccessibilityPrimaryKey.class)
 public class ConsultingRoomInaccessibility {
 
     @Id
+    private Long id;
+
     private java.sql.Date date;
 
-    @Id
     @Column(name = "start_time")
     private java.sql.Time startTime;
 
-    @Id
     @Column(name = "end_time")
     private java.sql.Time endTime;
 
-    @Id
     @Column(name = "consulting_room_id")
     private long consultingRoomId;
 
+    public ConsultingRoomInaccessibility() {
+    }
+
+    public ConsultingRoomInaccessibility(ConsultingRoomInaccessibilityWthConsultingRoom c) {
+        this.id = c.id;
+        this.date = c.date;
+        this.startTime = c.startTime;
+        this.endTime = c.endTime;
+        this.consultingRoomId = c.consultingRoom.getId();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public java.sql.Date getDate() {
         return date;

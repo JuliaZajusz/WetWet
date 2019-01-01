@@ -41,7 +41,7 @@ class PatronCard extends Component {
           </div>
           <div>
             Zwierzęta:
-            {this.state.patron.pets.map((pet) => {
+            {(this.state.patron && this.state.patron.pets) && this.state.patron.pets.map((pet) => {
               return <div>
                 {pet.name}
               </div>
@@ -49,7 +49,7 @@ class PatronCard extends Component {
           </div>
           <div>
             Adresy:
-            {this.state.patron.addresses.map((address) => {
+            {(this.state.patron && this.state.patron.addresses) && this.state.patron.addresses.map((address) => {
               return <div>
                 {address.street && address.street.name + ' '}
 
@@ -64,7 +64,9 @@ class PatronCard extends Component {
         {(arrayPath[1] === 'patron'
           && arrayPath[3] === 'edit') && <div>
           <PatronForm data={this.state.patron} onSubmitSuccess={(res) => {
-            this.setState({ patron: res });
+            // this.setState({ patron: res });
+            let path = this.props.history.location.pathname.split('/')
+            getPatron(path[2]).then((res) => this.setState({ patron: res }))
             history.push('/patron/' + res.id)
           }}/>
         </div>}
