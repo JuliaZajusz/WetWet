@@ -54,7 +54,14 @@ class AppointmentForm extends Component {
           endTime: field === 'endTime' ? moment(dateString, 'HH:mm').format('HH:mm:ss') : this.state.dateTime.endTime.format('HH:mm:ss'),
 
         };
-        getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
+      getConsultingRooms(body).then((res) => {
+        this.setState({ consultingRooms: res })
+        if (!res.find(consultingRoom => consultingRoom.id === this.props.form.getFieldValue('consultingRoomId'))) {
+          this.props.form.resetFields('consultingRoomId');
+        }
+      });
+
+
     }
 
   componentWillMount() {
@@ -319,7 +326,6 @@ class AppointmentForm extends Component {
   }
 
   selectPatron = (patron) => {
-    console.log(patron)
     this.setState({ selectedPatron: patron.value })
     getPatronPets(patron.value.id).then((res) => this.setState({ patients: res }))
   }

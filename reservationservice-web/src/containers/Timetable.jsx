@@ -91,6 +91,11 @@ class Timetable extends Component {
     this.clickChild()
     }
 
+  clickChild = () => {
+  }
+  clickCancelChild = () => {
+  }
+
     handleOk = (e) => {
         this.setState({
             visible: false,

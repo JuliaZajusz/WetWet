@@ -29,6 +29,8 @@ class AppointmentCard extends Component {
       <div>
         {this.props.edit ?
           <WrappedAppointmentForm
+            setClick={click => this.clickChild = click}
+            setCancelClick={clickCancel => this.clickCancelChild = clickCancel}
             patron={this.props.patron}
             employees={this.props.employees}
             appointment={this.props.appointment}
