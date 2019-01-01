@@ -74,6 +74,13 @@ class AppointmentForm extends Component {
         endTime: this.props.appointment ? moment(this.props.appointment.endTime, 'HH:mm') : moment(this.props.slotInfo.end, 'HH:mm'),
       },
     })
+
+    let body = {
+      date: this.state.dateTime.date.format('YYYY-MM-DD'),
+      startTime: this.state.dateTime.startTime.format('HH:mm:ss'),
+      endTime: this.state.dateTime.endTime.format('HH:mm:ss'),
+    };
+    getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
   }
 
   format = 'HH:mm';
