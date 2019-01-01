@@ -31,41 +31,42 @@ class AppointmentForm extends Component {
 
       let body = {
           date: this.state.dateTime.date.format('YYYY-MM-DD'),
-          startTime:  this.state.dateTime.startTime.format('HH:MM:SS'),
-          endTime: this.state.dateTime.endTime.format('HH:MM:SS')
+        startTime: this.state.dateTime.startTime.format('HH:mm:ss'),
+        endTime: this.state.dateTime.endTime.format('HH:mm:ss'),
       };
       getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
   }
 
     loadConsultingRooms = (date, dateString, field )=> {
-        console.log("field: ", field);
         this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
-
         if(field === "date" ){
-            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+          this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString) } })
         }
         else if(field === "startTime" ){
-            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+          this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString, 'HH:mm') } })
         }
         else if(field === "endTime" ){
-            this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+          this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString, 'HH:mm') } })
         }
-        console.log('data' + date + ' ' + dateString);
         let body = {
           date: field === 'date' ? dateString : moment(this.state.dateTime.date).format('YYYY-MM-DD'),
-          startTime: field === 'startTime' ? dateString + ':00' : moment(this.state.dateTime.startTime).format('HH:MM:SS'),
-          endTime: field === 'endTime' ? dateString + ':00' : moment(this.state.dateTime.endTime).format('HH:MM:SS'),
+          startTime: field === 'startTime' ? moment(dateString, 'HH:mm').format('HH:mm:ss') : this.state.dateTime.startTime.format('HH:mm:ss'),
+          endTime: field === 'endTime' ? moment(dateString, 'HH:mm').format('HH:mm:ss') : this.state.dateTime.endTime.format('HH:mm:ss'),
+
         };
-      console.log(body);
-        // console.log(this.props.appointment ? moment(this.props.appointment.date, this.dateFormat) : moment(this.props.slotInfo.start, this.dateFormat));
-        // console.log(this.state.dateTime[field]);
         getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
     }
 
   componentWillMount() {
-    console.log('componentWillMount')
     getPatrons().then((res) => this.setState({ patrons: res }));
+  }
 
+  componentDidMount() {
+    this.props.setClick(this.getAlert);
+    this.props.setCancelClick(this.handleCancel);
+  }
+
+  getAlert = () => {
     this.setState({
       dateTime: {
         date: this.props.appointment ? moment(this.props.appointment.date, 'YYYY-MM-DD') : moment(this.props.slotInfo.start, 'YYYY-MM-DD'),
@@ -79,11 +80,11 @@ class AppointmentForm extends Component {
   dateFormat = 'YYYY-MM-DD';
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.props.form.getFieldsValue())
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+
       let appointment = {
         'id': _.get(this.props, 'appointment.id'),
         'employeeId': fieldsValue.employeeId,
@@ -93,8 +94,8 @@ class AppointmentForm extends Component {
         'description': fieldsValue.description,
         'cost': 0,
         'date': fieldsValue.date,
-        'startTime': fieldsValue.startTime.format('HH:MM:SS'),
-        'endTime': fieldsValue.endTime.format('HH:MM:SS'),
+        'startTime': fieldsValue.startTime.format('HH:mm:ss'),
+        'endTime': fieldsValue.endTime.format('HH:mm:ss'),
         // addressPointId: 1,
         addressDTO: {
           'id': 1,
@@ -112,6 +113,11 @@ class AppointmentForm extends Component {
           },
         )
     });
+  }
+
+  handleCancel = () => {
+    this.setState({ selectedPatron: null })
+    this.props.form.resetFields();
   }
 
   render() {
@@ -132,7 +138,6 @@ class AppointmentForm extends Component {
           <Col xs={'12'} sm={'4'} className={'card-label'}>Opiekun</Col>
           <Col xs={'12'} sm={'8'} className={'card-value'}>
             <ReactSelect
-              // className={"custom-select"}
               name="form-field-name"
               value={{
                 value: this.state.selectedPatron,
@@ -296,10 +301,8 @@ class AppointmentForm extends Component {
             }}
           >
             <div className={'button-container'}>
-              <Button type="secondary" onClick={() => {
-                this.setState({ selectedPatron: null })
-                this.props.onCancel()
-              }}>Anuluj</Button>
+              <Button type="secondary" onClick={() => this.props.onCancel()
+              }>Anuluj</Button>
               <Button type="primary" htmlType="submit">Zapisz</Button>
             </div>
           </FormItem>

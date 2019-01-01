@@ -57,24 +57,16 @@ public class ConsultingRoomService {
                                     });
                         }
                 ).collect(Collectors.toList());
-
-        //        return accessibleConsultingRooms;
         return freeConsultingRooms;
     }
 
     public List<Appointment> filterByAppointmentDateContainsWetDate(WetDate a, List<Appointment> appointments) {
         return appointments.stream()
-//                .map(appointment -> new WetDate(appointment))
                 .filter(appointment -> {
                             WetDate wetDate = new WetDate(appointment);
                             return checkIfWetDateContainsAnother(wetDate, a);
                         }
                 ).collect(Collectors.toList());
-    }
-
-    public boolean checkIfWetDateContainsAtLEastOneFromAppointmentList(WetDate a, List<Appointment> appointments) {
-        return appointments.stream().map(appointment -> new WetDate(appointment))
-                .anyMatch(wetDate -> checkIfWetDateContainsAnother(wetDate, a));
     }
 
     public boolean checkIfWetDateContainsAtLEastOneFromList(WetDate a, List<ConsultingRoomInaccessibility> inaccessibilities) {

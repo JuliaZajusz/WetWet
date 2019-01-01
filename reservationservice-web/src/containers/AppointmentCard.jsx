@@ -24,7 +24,6 @@ class AppointmentCard extends Component {
 
 
   render() {
-    // let consultingRoom = this.props.consultingRooms.find((cr) => cr.id === this.props.appointment.consultingRoomId)
     let consultingRoom = this.state.consultingRooms.find((cr) => cr.id === this.props.appointment.consultingRoomId)
     return (
       <div>

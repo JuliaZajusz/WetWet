@@ -88,7 +88,7 @@ class Timetable extends Component {
             visible: true,
             slotInfo: slotInfo,
         });
-
+    this.clickChild()
     }
 
     handleOk = (e) => {
@@ -110,6 +110,7 @@ class Timetable extends Component {
           patron: null,
           edit: false,
         });
+      this.clickCancelChild(e)
     }
 
   handleDelete = () => {
@@ -188,6 +189,8 @@ class Timetable extends Component {
             footer={[]}
           >
             <WrappedAppointmentForm
+              setClick={click => this.clickChild = click}
+              setCancelClick={clickCancel => this.clickCancelChild = clickCancel}
               employees={this.state.employees}
               slotInfo={this.state.slotInfo}
               onOk={this.handleOk}
