@@ -1,5 +1,6 @@
 package com.wetwet.ReservationService.service;
 
+import com.wetwet.ReservationService.database.Appointment;
 import com.wetwet.ReservationService.database.ConsultingRoom;
 import com.wetwet.ReservationService.database.ConsultingRoomInaccessibility;
 import com.wetwet.ReservationService.database.WetDate;
@@ -19,6 +20,8 @@ public class ConsultingRoomService {
     private ConsultingRoomRepository consultingRoomRepository;
     @Autowired
     private ConsultingRoomInaccessibilityRepository consultingRoomInaccessibilityRepository;
+    @Autowired
+    private AppointmentService appointmentService;
 
     public ConsultingRoom createConsultingRoom(ConsultingRoom consultingRoom) {
         return consultingRoomRepository.save(consultingRoom);
@@ -34,12 +37,44 @@ public class ConsultingRoomService {
 
     public List<ConsultingRoom> getAllAccessibleConsultingRooms(WetDate date) {
         List<ConsultingRoom> allConsultingRooms = consultingRoomRepository.findAll();
-        return allConsultingRooms.stream()
+        List<ConsultingRoom> accessibleConsultingRooms = allConsultingRooms.stream()
                 .filter(consultingRoom -> {
                     List<ConsultingRoomInaccessibility> consultingRoomInaccessibilities = consultingRoomInaccessibilityRepository.findAllByConsultingRoomId(consultingRoom.getId());
                     return !checkIfWetDateContainsAtLEastOneFromList(date, consultingRoomInaccessibilities);
                 }).collect(Collectors.toList());
 
+
+        List<Appointment> appointmentsByDay = appointmentService.getAppointmentsByDate(date.date.toString());
+
+        List<Appointment> appointmentsInTheSameTime = filterByAppointmentDateContainsWetDate(date, appointmentsByDay);
+
+        List<ConsultingRoom> freeConsultingRooms = accessibleConsultingRooms.stream()
+                .filter(consultingRoom -> {
+                            return !appointmentsInTheSameTime.stream()
+                                    .anyMatch(appointment -> {
+                                        boolean isTheSameConsultingRoom = appointment.getConsultingRoomId() != null && appointment.getConsultingRoomId() == consultingRoom.getId();
+                                        return isTheSameConsultingRoom;
+                                    });
+                        }
+                ).collect(Collectors.toList());
+
+        //        return accessibleConsultingRooms;
+        return freeConsultingRooms;
+    }
+
+    public List<Appointment> filterByAppointmentDateContainsWetDate(WetDate a, List<Appointment> appointments) {
+        return appointments.stream()
+//                .map(appointment -> new WetDate(appointment))
+                .filter(appointment -> {
+                            WetDate wetDate = new WetDate(appointment);
+                            return checkIfWetDateContainsAnother(wetDate, a);
+                        }
+                ).collect(Collectors.toList());
+    }
+
+    public boolean checkIfWetDateContainsAtLEastOneFromAppointmentList(WetDate a, List<Appointment> appointments) {
+        return appointments.stream().map(appointment -> new WetDate(appointment))
+                .anyMatch(wetDate -> checkIfWetDateContainsAnother(wetDate, a));
     }
 
     public boolean checkIfWetDateContainsAtLEastOneFromList(WetDate a, List<ConsultingRoomInaccessibility> inaccessibilities) {

@@ -7,7 +7,7 @@ import ReactSelect from 'react-select';
 import { Col, Row } from 'react-bootstrap'
 import { getPatrons } from '../clients/PatronClient'
 import { getPatronPets } from '../clients/PatientClient'
-import {getConsultingRooms} from "../clients/ConsultingRoomClient";
+import { getConsultingRooms } from '../clients/ConsultingRoomClient';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -52,20 +52,27 @@ class AppointmentForm extends Component {
         }
         console.log('data' + date + ' ' + dateString);
         let body = {
-            date: field === "date" ? dateString : this.state.dateTime.date.format('YYYY-MM-DD'),
-            startTime: field === "startTime" ? dateString+ ":00" : this.state.dateTime.startTime.format('HH:MM:SS'),
-            endTime: field === "endTime" ? dateString+ ":00" :this.state.dateTime.endTime.format('HH:MM:SS')
+          date: field === 'date' ? dateString : moment(this.state.dateTime.date).format('YYYY-MM-DD'),
+          startTime: field === 'startTime' ? dateString + ':00' : moment(this.state.dateTime.startTime).format('HH:MM:SS'),
+          endTime: field === 'endTime' ? dateString + ':00' : moment(this.state.dateTime.endTime).format('HH:MM:SS'),
         };
-
+      console.log(body);
         // console.log(this.props.appointment ? moment(this.props.appointment.date, this.dateFormat) : moment(this.props.slotInfo.start, this.dateFormat));
         // console.log(this.state.dateTime[field]);
         getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
     }
 
   componentWillMount() {
+    console.log('componentWillMount')
     getPatrons().then((res) => this.setState({ patrons: res }));
 
-
+    this.setState({
+      dateTime: {
+        date: this.props.appointment ? moment(this.props.appointment.date, 'YYYY-MM-DD') : moment(this.props.slotInfo.start, 'YYYY-MM-DD'),
+        startTime: this.props.appointment ? moment(this.props.appointment.startTime, 'HH:mm') : moment(this.props.slotInfo.start, 'HH:mm'),
+        endTime: this.props.appointment ? moment(this.props.appointment.endTime, 'HH:mm') : moment(this.props.slotInfo.end, 'HH:mm'),
+      },
+    })
   }
 
   format = 'HH:mm';
