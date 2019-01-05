@@ -15,28 +15,17 @@ class PatientForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // if (history.location.pathname === '/patron/new') {
-        //   addPatron(values).then((res) => {
-        //       this.props.onSubmitSuccess(res)
-        //     },
-        //   )
-        // }
-        // else {
-        //   updatePatron({ ...values, id: this.props.data.id }).then((res) => {
-        //       this.props.onSubmitSuccess(res)
-        //     },
-        //   )
-        // }
+        //TODO
       }
     });
   }
 
   handleCancel = () => {
     if (history.location.pathname === '/patron/new') {
-      history.push('/patrons')
+      history.push('/patients')
     }
     else {
-      history.push('/patron/' + _.get(this.props, 'data.id'))
+      history.push('/patient/' + _.get(this.props, 'data.id'))
     }
   }
 
@@ -73,11 +62,11 @@ class PatientForm extends Component {
 
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="Imię">
-            {getFieldDecorator('firstName', {
+            {getFieldDecorator('name', {
               rules: [{
-                required: true, message: 'Pole wymagane',
+                // required: true, message: 'Pole wymagane',
               }],
-              initialValue: _.get(this.props, 'data.firstName'),
+              initialValue: _.get(this.props, 'data.name'),
             })
             (
               <Input/>,
@@ -85,37 +74,59 @@ class PatientForm extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="Nazwisko"
+            label="Gatunek"
           >
-            {getFieldDecorator('lastName', {
+            {getFieldDecorator('species', {
               rules: [{
                 required: true, message: 'Pole wymagane',
               }],
-              initialValue: _.get(this.props, 'data.lastName'),
+              initialValue: _.get(this.props, 'data.breed.species'),
             })(
               <Input/>,
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="E-mail"
+            label="Rasa"
           >
-            {getFieldDecorator('email', {
+            {getFieldDecorator('breed', {
               rules: [{
-                type: 'email', message: 'Niepoprawny email!',
+                required: true, message: 'Pole wymagane',
               }],
-              initialValue: _.get(this.props, 'data.email'),
+              initialValue: _.get(this.props, 'data.breed.name'),
             })(
               <Input/>,
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="Telefon"
+            label="Umaszczenie"
           >
-            {getFieldDecorator('phone', {
+            {getFieldDecorator('coat', {
               rules: [],
-              initialValue: _.get(this.props, 'data.phone'),
+              initialValue: _.get(this.props, 'data.coat'),
+            })(
+              <Input/>,
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="Zanki szczególne"
+          >
+            {getFieldDecorator('specialCharacters', {
+              rules: [],
+              initialValue: _.get(this.props, 'data.specialCharacters'),
+            })(
+              <Input/>,
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="Płeć"
+          >
+            {getFieldDecorator('sex', {
+              rules: [],
+              initialValue: _.get(this.props, 'data.sex'),
             })(
               <Input/>,
             )}
