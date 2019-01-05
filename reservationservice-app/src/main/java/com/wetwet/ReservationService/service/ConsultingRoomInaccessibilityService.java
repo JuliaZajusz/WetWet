@@ -32,11 +32,6 @@ public class ConsultingRoomInaccessibilityService {
         return consultingRoomInaccessibilityWthConsultingRooms;
     }
 
-    public ConsultingRoomInaccessibility createInaccessibility(ConsultingRoomInaccessibilityWthConsultingRoom consultingRoomInaccessibilityWthConsultingRoom) {
-        ConsultingRoomInaccessibility consultingRoomInaccessibility = new ConsultingRoomInaccessibility(consultingRoomInaccessibilityWthConsultingRoom);
-        return consultingRoomInaccessibilityRepository.save(consultingRoomInaccessibility);
-    }
-
     public ConsultingRoomInaccessibility createInaccessibility(ConsultingRoomInaccessibility consultingRoomInaccessibility) {
         return consultingRoomInaccessibilityRepository.save(consultingRoomInaccessibility);
     }

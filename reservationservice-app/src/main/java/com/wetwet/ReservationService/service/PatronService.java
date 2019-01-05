@@ -3,6 +3,7 @@ package com.wetwet.ReservationService.service;
 import com.wetwet.ReservationService.database.Patron;
 import com.wetwet.ReservationService.dto.PatronWithPetsDTO;
 import com.wetwet.ReservationService.repository.PatronRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,15 +14,12 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class PatronService {
+    @Autowired
     private PatronRepository repository;
+    @Autowired
     private PatientService patientService;
+    @Autowired
     private AddressPointService addressPointService;
-
-    public PatronService(PatronRepository repository, PatientService patientService, AddressPointService addressPointService) {
-        this.repository = repository;
-        this.patientService = patientService;
-        this.addressPointService = addressPointService;
-    }
 
 
     public List<Patron> getPatrons() {
@@ -53,5 +51,9 @@ public class PatronService {
                 })
                 .collect(Collectors.toList());
         return patrons;
+    }
+
+    public Optional<Patron> findById(Long patronId) {
+        return repository.findById(patronId);
     }
 }
