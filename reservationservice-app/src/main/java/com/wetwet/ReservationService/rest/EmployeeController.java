@@ -1,7 +1,6 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.Employee;
-import com.wetwet.ReservationService.dto.PatientDTO;
 import com.wetwet.ReservationService.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,6 @@ public class EmployeeController {
     }
 
     @GetMapping("/all")
-//    @PreAuthorize("hasAuthority('NONE')")
     public List<Employee> getAllEmployees() {
         return employeeService.getEmployees();
     }
