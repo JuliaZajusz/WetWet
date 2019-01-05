@@ -1,15 +1,15 @@
 package com.wetwet.ReservationService.service;
 
 
-import com.wetwet.ReservationService.database.*;
+import com.wetwet.ReservationService.database.Appointment;
+import com.wetwet.ReservationService.database.PatientAppointment;
 import com.wetwet.ReservationService.dto.AppointmentWithPatientAndAddress;
-import com.wetwet.ReservationService.repository.*;
+import com.wetwet.ReservationService.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,51 +19,33 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
-    private PatientAppointmentRepository patientAppointmentRepository;
+    private PatientAppointmentService patientAppointmentService;
     @Autowired
-    private PatronAppointmentRepository patronAppointmentRepository;
+    private PatronAppointmentService patronAppointmentService;
     @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private PatronRepository patronRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private EmployeeAppointmentRepository employeeAppointmentRepository;
+    private EmployeeAppointmentService employeeAppointmentService;
 
     public List<Appointment> getAppointmentsByDate(String date) {
-
         List<Appointment> appointments = appointmentRepository.findAll().stream()
-                .filter(appointment -> appointment.getDate().toString().equals(date)
-                )
+                .filter(appointment -> appointment.getDate().toString().equals(date))
                 .collect(Collectors.toList());
         return appointments;
     }
 
 
     public List<AppointmentWithPatientAndAddress> getAppointments() {
-
         List<Appointment> appointments = appointmentRepository.findAll();
         List<AppointmentWithPatientAndAddress> appointmentWithPatientAndAddresses = appointments.stream()
                 .map(appW -> {
-                            Optional<PatientAppointment> opPatientAppointment = patientAppointmentRepository.findById(appW.getId());
-                            Optional<PatronAppointment> opPatronAppointment = patronAppointmentRepository.findById(appW.getId());
-                            Optional<EmployeeAppointment> opEmployeeAppointment = employeeAppointmentRepository.findById(appW.getId());
-
-                            PatientAppointment patientAppointment = opPatientAppointment.isPresent() ? opPatientAppointment.get() : null;
-                            PatronAppointment patronAppointment = opPatronAppointment.isPresent() ? opPatronAppointment.get() : null;
-                            EmployeeAppointment employeeAppointment = opEmployeeAppointment.isPresent() ? opEmployeeAppointment.get() : null;
-
-                            Long patientId = patientAppointment != null ? patientAppointment.getPatientId() : null;
-                            Long patronId = patronAppointment != null ? patronAppointment.getPatronId() : null;
-                            Long employeeId = employeeAppointment != null ? employeeAppointment.getEmployeeId() : null;
-                            return new AppointmentWithPatientAndAddress(appW, patientId, patronId, employeeId);
+                    Long patientId = patientAppointmentService.getAppointmentPatientId(appW);
+                    Long patronId = patronAppointmentService.getAppointmentPatronId(appW);
+                    Long employeeId = employeeAppointmentService.getAppointmentEmployeeId(appW);
+                    return new AppointmentWithPatientAndAddress(appW, patientId, patronId, employeeId);
                         }
                 )
                 .collect(Collectors.toList());
         return appointmentWithPatientAndAddresses;
     }
-
 
     public Appointment createAppointment(AppointmentWithPatientAndAddress appointmentWithPatientAndAddress) {
         if (appointmentWithPatientAndAddress.id != null) {
@@ -71,92 +53,31 @@ public class AppointmentService {
         }
         Appointment appointment = new Appointment(appointmentWithPatientAndAddress);
         Appointment appointment1 = appointmentRepository.save(appointment);
-
-        Patient patient = patientRepository.findById(appointmentWithPatientAndAddress.patientId).get();
-        if (patient != null) {
-            PatientAppointment patientAppointment;
-            patientAppointment = new PatientAppointment(patient.getId(), appointment1.getId());
-            patientAppointmentRepository.save(patientAppointment);
-        }
-
-        Patron patron = patronRepository.findById(appointmentWithPatientAndAddress.patronId).get();
-        if (patron != null) {
-            PatronAppointment patronAppointment;
-            patronAppointment = new PatronAppointment(patron.getId(), appointment1.getId());
-            patronAppointmentRepository.save(patronAppointment);
-        }
-
-        Employee employee = employeeRepository.findById(appointmentWithPatientAndAddress.employeeId).get();
-        if (employee != null) {
-            EmployeeAppointment employeeAppointment;
-            employeeAppointment = new EmployeeAppointment(employee.getId(), appointment1.getId());
-            employeeAppointmentRepository.save(employeeAppointment);
-        }
-
+        patientAppointmentService.assignAppointmentToPatient(appointmentWithPatientAndAddress, appointment1);
+        patronAppointmentService.assignAppointmentToPatron(appointmentWithPatientAndAddress, appointment1);
+        employeeAppointmentService.assignAppointmentToEmployee(appointmentWithPatientAndAddress, appointment1);
         return appointment1;
     }
 
     public Appointment updateAppointment(AppointmentWithPatientAndAddress appointmentWithPatientAndAddress) {
         Appointment appointment = new Appointment(appointmentWithPatientAndAddress);
-
-
         Long appointmentId = appointmentWithPatientAndAddress.id;
-
-        PatientAppointment oldPatientAppointment = patientAppointmentRepository.findById(appointmentId).orElse(null);
-        if (oldPatientAppointment != null &&
-                appointmentWithPatientAndAddress.patientId != oldPatientAppointment.getPatientId()) {
-            patientAppointmentRepository.delete(oldPatientAppointment);
-        }
-        Patient patient = patientRepository.findById(appointmentWithPatientAndAddress.patientId).orElseThrow(() -> new IllegalArgumentException("patientId"));
-        PatientAppointment patientAppointment;
-        patientAppointment = new PatientAppointment(patient.getId(), appointment.getId());
-        patientAppointmentRepository.save(patientAppointment);
-
-
-        PatronAppointment oldPatronAppointment = patronAppointmentRepository.findById(appointmentId).orElse(null);
-        if (oldPatronAppointment != null &&
-                appointmentWithPatientAndAddress.patronId != oldPatronAppointment.getPatronId()) {
-            patronAppointmentRepository.delete(oldPatronAppointment);
-        }
-        Patron patron = patronRepository.findById(appointmentWithPatientAndAddress.patronId).orElseThrow(() -> new IllegalArgumentException("patronId"));
-        PatronAppointment patronAppointment;
-        patronAppointment = new PatronAppointment(patron.getId(), appointment.getId());
-        patronAppointmentRepository.save(patronAppointment);
-
-
-        EmployeeAppointment oldEmployeeAppointment = employeeAppointmentRepository.findById(appointmentId).orElse(null);
-        if (oldEmployeeAppointment != null &&
-                appointmentWithPatientAndAddress.employeeId != oldEmployeeAppointment.getEmployeeId()) {
-            employeeAppointmentRepository.delete(oldEmployeeAppointment);
-        }
-        Employee employee = employeeRepository.findById(appointmentWithPatientAndAddress.employeeId).orElseThrow(() -> new IllegalArgumentException("employeeId"));
-        EmployeeAppointment employeeAppointment;
-        employeeAppointment = new EmployeeAppointment(employee.getId(), appointment.getId());
-        employeeAppointmentRepository.save(employeeAppointment);
-
+        patientAppointmentService.updatePatientAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
+        patronAppointmentService.updatePatronAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
+        employeeAppointmentService.updateEmployeeAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
         Appointment appointment1 = appointmentRepository.save(appointment);
         return appointment1;
     }
 
-
     public void deleteAppointment(Long id) {
-        PatientAppointment oldPatientAppointment = patientAppointmentRepository.findById(id).orElse(null);
-        if (oldPatientAppointment != null) {
-            patientAppointmentRepository.delete(oldPatientAppointment);
-        }
-        PatronAppointment oldPatronAppointment = patronAppointmentRepository.findById(id).orElse(null);
-        if (oldPatronAppointment != null) {
-            patronAppointmentRepository.delete(oldPatronAppointment);
-        }
-        EmployeeAppointment oldEmployeeAppointment = employeeAppointmentRepository.findById(id).orElse(null);
-        if (oldEmployeeAppointment != null) {
-            employeeAppointmentRepository.delete(oldEmployeeAppointment);
-        }
+        patientAppointmentService.deletePatientAppointment(id);
+        patronAppointmentService.deletePatronAppointment(id);
+        employeeAppointmentService.deleteEmployeeAppointment(id);
         appointmentRepository.deleteById(id);
     }
 
     public List<AppointmentWithPatientAndAddress> getPatientAppointments(Long patientId) {
-        List<PatientAppointment> patientAppointments = patientAppointmentRepository.findAllByPatientId(patientId);
+        List<PatientAppointment> patientAppointments = patientAppointmentService.findAllByPatientId(patientId);
         List<AppointmentWithPatientAndAddress> appointments = patientAppointments
                 .stream()
                 .map(patientAppointment ->
@@ -168,19 +89,9 @@ public class AppointmentService {
 
     public AppointmentWithPatientAndAddress getAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("appointmentId"));
-
-        Optional<PatientAppointment> opPatientAppointment = patientAppointmentRepository.findById(appointment.getId());
-        Optional<PatronAppointment> opPatronAppointment = patronAppointmentRepository.findById(appointment.getId());
-        Optional<EmployeeAppointment> opEmployeeAppointment = employeeAppointmentRepository.findById(appointment.getId());
-
-        PatientAppointment patientAppointment = opPatientAppointment.isPresent() ? opPatientAppointment.get() : null;
-        PatronAppointment patronAppointment = opPatronAppointment.isPresent() ? opPatronAppointment.get() : null;
-        EmployeeAppointment employeeAppointment = opEmployeeAppointment.isPresent() ? opEmployeeAppointment.get() : null;
-
-        Long patientId = patientAppointment != null ? patientAppointment.getPatientId() : null;
-        Long patronId = patronAppointment != null ? patronAppointment.getPatronId() : null;
-        Long employeeId = employeeAppointment != null ? employeeAppointment.getEmployeeId() : null;
+        Long patientId = patientAppointmentService.getAppointmentPatientId(appointment);
+        Long patronId = patronAppointmentService.getAppointmentPatronId(appointment);
+        Long employeeId = employeeAppointmentService.getAppointmentEmployeeId(appointment);
         return new AppointmentWithPatientAndAddress(appointment, patientId, patronId, employeeId);
-
     }
 }

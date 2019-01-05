@@ -19,7 +19,6 @@ class PositionController {
         this.positionService = positionService;
     }
 
-
     @GetMapping("/all")
     List<Position> getAppointments() {
         return positionService.getPositions();

@@ -30,13 +30,7 @@ public class PatronController {
 
     @GetMapping(path = "/{id}")
     @ResponseBody
-//    public ResponseEntity<Patron> getPatronById(@PathVariable Long id) {
     public PatronWithPetsDTO getPatronById(@PathVariable Long id) {
-//        Optional<PatronWithPetsDTO> patron = patronService.getPatronById(id);
-//        if (patron.isPresent()) {
-//            return new ResponseEntity<>(patron.get(), null, HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
         return patronService.getPatronById(id);
     }
 
