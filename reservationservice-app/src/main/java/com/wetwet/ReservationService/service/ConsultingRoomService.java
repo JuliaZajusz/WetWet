@@ -4,13 +4,13 @@ import com.wetwet.ReservationService.database.Appointment;
 import com.wetwet.ReservationService.database.ConsultingRoom;
 import com.wetwet.ReservationService.database.ConsultingRoomInaccessibility;
 import com.wetwet.ReservationService.database.WetDate;
-import com.wetwet.ReservationService.repository.ConsultingRoomInaccessibilityRepository;
 import com.wetwet.ReservationService.repository.ConsultingRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +19,7 @@ public class ConsultingRoomService {
     @Autowired
     private ConsultingRoomRepository consultingRoomRepository;
     @Autowired
-    private ConsultingRoomInaccessibilityRepository consultingRoomInaccessibilityRepository;
+    private ConsultingRoomInaccessibilityService consultingRoomInaccessibilityService;
     @Autowired
     private AppointmentService appointmentService;
 
@@ -39,7 +39,7 @@ public class ConsultingRoomService {
         List<ConsultingRoom> allConsultingRooms = consultingRoomRepository.findAll();
         List<ConsultingRoom> accessibleConsultingRooms = allConsultingRooms.stream()
                 .filter(consultingRoom -> {
-                    List<ConsultingRoomInaccessibility> consultingRoomInaccessibilities = consultingRoomInaccessibilityRepository.findAllByConsultingRoomId(consultingRoom.getId());
+                    List<ConsultingRoomInaccessibility> consultingRoomInaccessibilities = consultingRoomInaccessibilityService.findAllByConsultingRoomId(consultingRoom.getId());
                     return !checkIfWetDateContainsAtLEastOneFromList(date, consultingRoomInaccessibilities);
                 }).collect(Collectors.toList());
 
@@ -97,5 +97,9 @@ public class ConsultingRoomService {
         }
         System.out.println("Inna data");
         return false;
+    }
+
+    public Optional<ConsultingRoom> findById(Long consultingRoomId) {
+        return consultingRoomRepository.findById(consultingRoomId);
     }
 }

@@ -4,7 +4,6 @@ import com.wetwet.ReservationService.database.ConsultingRoom;
 import com.wetwet.ReservationService.database.ConsultingRoomInaccessibility;
 import com.wetwet.ReservationService.dto.ConsultingRoomInaccessibilityWthConsultingRoom;
 import com.wetwet.ReservationService.repository.ConsultingRoomInaccessibilityRepository;
-import com.wetwet.ReservationService.repository.ConsultingRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +15,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class ConsultingRoomInaccessibilityService {
     @Autowired
-    private ConsultingRoomInaccessibilityRepository consultingRoomInaccessibilityRepository;
+    private ConsultingRoomInaccessibilityRepository repository;
     @Autowired
-    private ConsultingRoomRepository consultingRoomRepository;
+    private ConsultingRoomService consultingRoomService;
 
     public List<ConsultingRoomInaccessibilityWthConsultingRoom> getInaccessibilities() {
-        List<ConsultingRoomInaccessibility> consultingRoomInaccessibilities = consultingRoomInaccessibilityRepository.findAll();
+        List<ConsultingRoomInaccessibility> consultingRoomInaccessibilities = repository.findAll();
         List<ConsultingRoomInaccessibilityWthConsultingRoom> consultingRoomInaccessibilityWthConsultingRooms = consultingRoomInaccessibilities.stream()
                 .map(consultingRoomInaccessibility ->
                         {
-                            ConsultingRoom c = consultingRoomRepository.findById(consultingRoomInaccessibility.getConsultingRoomId()).orElseGet(null);
+                            ConsultingRoom c = consultingRoomService.findById(consultingRoomInaccessibility.getConsultingRoomId()).orElseGet(null);
                             return new ConsultingRoomInaccessibilityWthConsultingRoom(consultingRoomInaccessibility, c);
                         }
                 ).collect(Collectors.toList());
@@ -33,12 +32,17 @@ public class ConsultingRoomInaccessibilityService {
     }
 
     public ConsultingRoomInaccessibility createInaccessibility(ConsultingRoomInaccessibility consultingRoomInaccessibility) {
-        return consultingRoomInaccessibilityRepository.save(consultingRoomInaccessibility);
+        return repository.save(consultingRoomInaccessibility);
     }
 
     public ConsultingRoomInaccessibilityWthConsultingRoom getInaccessibilityById(Long id) {
-        ConsultingRoomInaccessibility consultingRoomInaccessibility = consultingRoomInaccessibilityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("consultingRoomInaccessibilityId"));
-        ConsultingRoom c = consultingRoomRepository.findById(consultingRoomInaccessibility.getConsultingRoomId()).orElseGet(null);
+        ConsultingRoomInaccessibility consultingRoomInaccessibility = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("consultingRoomInaccessibilityId"));
+        ConsultingRoom c = consultingRoomService.findById(consultingRoomInaccessibility.getConsultingRoomId()).orElseGet(null);
         return new ConsultingRoomInaccessibilityWthConsultingRoom(consultingRoomInaccessibility, c);
+    }
+
+
+    public List<ConsultingRoomInaccessibility> findAllByConsultingRoomId(long id) {
+        return repository.findAllByConsultingRoomId(id);
     }
 }
