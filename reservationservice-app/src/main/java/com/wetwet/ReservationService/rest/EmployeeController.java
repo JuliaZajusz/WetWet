@@ -1,9 +1,11 @@
 package com.wetwet.ReservationService.rest;
 
 import com.wetwet.ReservationService.database.Employee;
+import com.wetwet.ReservationService.database.WetDate;
 import com.wetwet.ReservationService.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,5 +26,10 @@ public class EmployeeController {
     public @ResponseBody
     Employee getEmployeeById(@PathVariable Long id){
         return employeeService.getEmployeeById(id);
+    }
+
+    @PostMapping("/all")
+    public List<Employee> getAllAvailableEmployees(@Valid @RequestBody WetDate date) {
+        return employeeService.getAllAvailableEmployees(date);
     }
 }

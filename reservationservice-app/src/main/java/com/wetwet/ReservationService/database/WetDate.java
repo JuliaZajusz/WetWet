@@ -21,6 +21,12 @@ public class WetDate {
         this.endTime = inaccessibility.getEndTime();
     }
 
+    public WetDate(EmployeeAvailability availability){
+        this.date = availability.getDate();
+        this.startTime = availability.getStartTime();
+        this.endTime = availability.getEndTime();
+    }
+
     public WetDate(Appointment appointment) {
         this.date = appointment.getDate();
         this.startTime = appointment.getStartTime();
