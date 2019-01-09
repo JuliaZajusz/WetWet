@@ -14,8 +14,8 @@ public class EmployeeAvailabilityService {
     @Autowired
     private EmployeeAvailabilityRepository repository;
 
-    public EmployeeAvailability createAvailability(EmployeeAvailability consultingRoomInaccessibility) {
-        return repository.save(consultingRoomInaccessibility);
+    public EmployeeAvailability createAvailability(EmployeeAvailability ea) {
+        return repository.save(ea);
     }
 
     public List<EmployeeAvailability> findAllByEmployeeId(long id) {
