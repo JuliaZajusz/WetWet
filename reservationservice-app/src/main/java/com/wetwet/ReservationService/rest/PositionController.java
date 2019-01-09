@@ -20,13 +20,13 @@ class PositionController {
     }
 
     @GetMapping("/all")
-    List<Position> getAppointments() {
+    List<Position> getPositions() {
         return positionService.getPositions();
     }
 
     @GetMapping(path = "/{id}")
     @ResponseBody
-    public ResponseEntity<Position> getPatronById(@PathVariable Long id) {
+    public ResponseEntity<Position> getPositionById(@PathVariable Long id) {
         Optional<Position> position = positionService.getPositionById(id);
         if (position.isPresent()) {
             return new ResponseEntity<>(position.get(), null, HttpStatus.OK);
@@ -35,7 +35,7 @@ class PositionController {
     }
 
     @PostMapping()
-    public Position createPatron(@Valid @RequestBody Position position) {
+    public Position createPosition(@Valid @RequestBody Position position) {
         return positionService.createPosition(position);
     }
 

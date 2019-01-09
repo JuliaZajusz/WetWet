@@ -8,6 +8,7 @@ import { Col, Row } from 'react-bootstrap'
 import { getPatrons } from '../clients/PatronClient'
 import { getPatronPets } from '../clients/PatientClient'
 import { getConsultingRooms } from '../clients/ConsultingRoomClient';
+import { getEmployees } from "../clients/EmployeesClient";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -18,6 +19,7 @@ class AppointmentForm extends Component {
     super();
     this.state = {
       consultingRooms: [],
+      availableEmployees: [],
       patients: [],
       patrons: [],
       selectedPatron: props.patron,
@@ -35,6 +37,7 @@ class AppointmentForm extends Component {
         endTime: this.state.dateTime.endTime.format('HH:mm:ss'),
       };
       getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
+      getEmployees(body).then((res) => this.setState({ availableEmployees: res }));
   }
 
     loadConsultingRooms = (date, dateString, field )=> {
@@ -64,6 +67,36 @@ class AppointmentForm extends Component {
 
     }
 
+  loadEmployees = (date, dateString, field)=> {
+    this.setState({dateTime:{...this.state.dateTime, [field]: dateString}})
+    if(field === "date" ){
+        this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString) } })
+    }
+    else if(field === "startTime" ){
+        this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString, 'HH:mm') } })
+    }
+    else if(field === "endTime" ){
+        this.setState({ dateTime: { ...this.state.dateTime, [field]: moment(dateString, 'HH:mm') } })
+    }
+    let body = {
+        date: field === 'date' ? dateString : moment(this.state.dateTime.date).format('YYYY-MM-DD'),
+        startTime: field === 'startTime' ? moment(dateString, 'HH:mm').format('HH:mm:ss') : this.state.dateTime.startTime.format('HH:mm:ss'),
+        endTime: field === 'endTime' ? moment(dateString, 'HH:mm').format('HH:mm:ss') : this.state.dateTime.endTime.format('HH:mm:ss'),
+    };
+      getEmployees(body).then((res) => {
+        this.setState({ availableEmployees: res })
+        if (!res.find(employee => employee.id === this.props.form.getFieldValue('employeeId'))) {
+            this.props.form.resetFields('employeeId');
+        }
+        console.log(res);
+    });
+    }
+
+    loadExternalData = (date, dateString, field)=>{
+    this.loadConsultingRooms(date, dateString, field);
+    this.loadEmployees(date, dateString, field);
+    }
+
   componentWillMount() {
     getPatrons().then((res) => this.setState({ patrons: res }));
   }
@@ -88,6 +121,7 @@ class AppointmentForm extends Component {
       endTime: this.state.dateTime.endTime.format('HH:mm:ss'),
     };
     getConsultingRooms(body).then((res) => this.setState({ consultingRooms: res }));
+    getEmployees(body).then((res) => this.setState({ availableEmployees: res }));
   }
 
   format = 'HH:mm';
@@ -196,7 +230,7 @@ class AppointmentForm extends Component {
               initialValue: this.props.appointment ? this.props.appointment.employeeId : null,
             })(
               <Select>
-                {this.props.employees.map((p) =>
+                {this.state.availableEmployees.map((p) =>
                   <Option value={p.id} key={p.id}>
                     {p.firstName + ' ' + p.lastName}
                   </Option>)
@@ -236,7 +270,7 @@ class AppointmentForm extends Component {
                 required: true, message: 'Pole wymagane',
               }],
               initialValue: this.state.dateTime.date
-            })(<DatePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "date")}
+            })(<DatePicker onChange={(date, dateString)=> this.loadExternalData(date, dateString, "date")}
               format={this.dateFormat}/>)}
           </FormItem>
 
@@ -250,7 +284,7 @@ class AppointmentForm extends Component {
                 required: true, message: 'Pole wymagane',
               }],
               initialValue: this.state.dateTime.startTime
-            })(<TimePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "startTime")}
+            })(<TimePicker onChange={(date, dateString)=> this.loadExternalData(date, dateString, "startTime")}
               format={this.format}/>)}
           </FormItem>
 
@@ -265,7 +299,7 @@ class AppointmentForm extends Component {
               }],
               initialValue: this.state.dateTime.endTime
             })(
-              <TimePicker onChange={(date, dateString)=> this.loadConsultingRooms(date, dateString, "endTime")}
+              <TimePicker onChange={(date, dateString)=> this.loadExternalData(date, dateString, "endTime")}
                   format={this.format}/>,
             )}
           </FormItem>
