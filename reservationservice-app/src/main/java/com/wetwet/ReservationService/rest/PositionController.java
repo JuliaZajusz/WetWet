@@ -20,7 +20,7 @@ class PositionController {
     }
 
     @GetMapping("/all")
-    List<Position> getPositions() {
+    List<Position> getAllPositions() {
         return positionService.getPositions();
     }
 

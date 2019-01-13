@@ -9,8 +9,8 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    username: springuser
-    password: qwerty123
+    username: user
+    password: user
     url: jdbc:mysql://localhost:3306/wetwet
 
 ##Main Database Connection

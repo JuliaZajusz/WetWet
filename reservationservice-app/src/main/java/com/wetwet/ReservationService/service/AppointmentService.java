@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class AppointmentService {
 
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private AppointmentRepository repository;
     @Autowired
     private PatientAppointmentService patientAppointmentService;
     @Autowired
@@ -26,7 +26,7 @@ public class AppointmentService {
     private EmployeeAppointmentService employeeAppointmentService;
 
     public List<Appointment> getAppointmentsByDate(String date) {
-        List<Appointment> appointments = appointmentRepository.findAll().stream()
+        List<Appointment> appointments = repository.findAll().stream()
                 .filter(appointment -> appointment.getDate().toString().equals(date))
                 .collect(Collectors.toList());
         return appointments;
@@ -34,7 +34,7 @@ public class AppointmentService {
 
 
     public List<AppointmentWithPatientAndAddress> getAppointments() {
-        List<Appointment> appointments = appointmentRepository.findAll();
+        List<Appointment> appointments = repository.findAll();
         List<AppointmentWithPatientAndAddress> appointmentWithPatientAndAddresses = appointments.stream()
                 .map(appW -> {
                     Long patientId = patientAppointmentService.getAppointmentPatientId(appW);
@@ -52,7 +52,7 @@ public class AppointmentService {
             return updateAppointment(appointmentWithPatientAndAddress);
         }
         Appointment appointment = new Appointment(appointmentWithPatientAndAddress);
-        Appointment appointment1 = appointmentRepository.save(appointment);
+        Appointment appointment1 = repository.save(appointment);
         patientAppointmentService.assignAppointmentToPatient(appointmentWithPatientAndAddress, appointment1);
         patronAppointmentService.assignAppointmentToPatron(appointmentWithPatientAndAddress, appointment1);
         employeeAppointmentService.assignAppointmentToEmployee(appointmentWithPatientAndAddress, appointment1);
@@ -65,7 +65,7 @@ public class AppointmentService {
         patientAppointmentService.updatePatientAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
         patronAppointmentService.updatePatronAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
         employeeAppointmentService.updateEmployeeAppointment(appointmentWithPatientAndAddress, appointment, appointmentId);
-        Appointment appointment1 = appointmentRepository.save(appointment);
+        Appointment appointment1 = repository.save(appointment);
         return appointment1;
     }
 
@@ -73,7 +73,7 @@ public class AppointmentService {
         patientAppointmentService.deletePatientAppointment(id);
         patronAppointmentService.deletePatronAppointment(id);
         employeeAppointmentService.deleteEmployeeAppointment(id);
-        appointmentRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
     public List<AppointmentWithPatientAndAddress> getPatientAppointments(Long patientId) {
@@ -88,7 +88,7 @@ public class AppointmentService {
     }
 
     public AppointmentWithPatientAndAddress getAppointment(Long id) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("appointmentId"));
+        Appointment appointment = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("appointmentId"));
         Long patientId = patientAppointmentService.getAppointmentPatientId(appointment);
         Long patronId = patronAppointmentService.getAppointmentPatronId(appointment);
         Long employeeId = employeeAppointmentService.getAppointmentEmployeeId(appointment);

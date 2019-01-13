@@ -22,8 +22,13 @@ class AppointmentController {
         return appointmentService.createAppointment(appointment);
     }
 
+    @PostMapping("/{id}")
+    Appointment updateAppointment(@Valid @RequestBody AppointmentWithPatientAndAddress appointment) {
+        return appointmentService.updateAppointment(appointment);
+    }
+
     @DeleteMapping("/{id}")
-    void addAppointment(@PathVariable Long id) {
+    void deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);
     }
 
